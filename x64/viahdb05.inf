@@ -1,0 +1,1600 @@
+;Copyright (c) Microsoft Corporation. All rights reserved.
+;
+;Module Name:
+;    viahdb5.inf
+;
+;Abstract:
+;    INF file for installing the Microsoft UAA Function Driver for High
+;    Definition Audio
+;
+
+; Copyright (c) 2006 ~ 2011 VIA Technologies, Inc.
+
+[Version]
+CatalogFile=viahduaa.cat
+Signature="$Windows NT$"
+Class=MEDIA
+ClassGuid={4d36e96c-e325-11ce-bfc1-08002be10318}
+Provider=%VIA%
+DriverPackageDisplayName=%DESC%
+DriverVer=10/19/2016,6.0.11.1100
+
+[DestinationDirs]
+DefaultDestDir      =10; dirid = \system32\drivers
+HdAudModel.CopyList =10,system32\drivers
+HdAudProp.CopyList  =10,system32
+HdAudShortCut.CopyList =10,system32
+SfxFx.CopyList=11     ; %windir%\system32
+Creative.SysFx32.CopyList  = 10, SysWOW64
+Creative.Filter.CopyList =10,system32\drivers
+DestVIAAUD=16422,\VIA\VIAAUD ;\Program Files
+
+[SourceDisksNames]
+222=%DiskId1%,"",222
+
+[SourceDisksFiles]
+viahduaa.sys=222
+VIASysFx.dll=222
+VIAPropPageExt.dll=222
+ViaMicArrayAPO.dll=222
+ViaMicArrayPropPageExt.dll=222
+VMAPO64.dll=222
+VMAPO232.dll=222
+VMAPO264.dll=222
+VMTHX64.dll=222
+VMPPLD64.DLL=222
+VMWRP64.DLL=222
+VMPPCN64.DLL=222
+VMAPO32.DLL=222
+VMTHX32.DLL=222
+VMfilt64.sys=222
+ViaKaraokeApo.dll=222
+ViaKaraokePropPageExt.dll=222
+ViakaraokeSrv.exe=222
+VtSrdAPO.dll=222
+PropPageExt.dll=222
+viaaud.exe=222
+
+[DestVIAAUD]
+viaaud.exe
+
+[Manufacturer]
+%VIAName%=VIAHDAUDIOID,NTamd64
+
+[SignatureAttributes]
+viahduaa.sys=SignatureAttributes.DRM
+ViakaraokeSrv.exe=SignatureAttributes.DRM
+VMfilt64.sys=SignatureAttributes.DRM
+viaaud.exe=SignatureAttributes.DRM
+VIASysFx.dll=SignatureAttributes.PETrust
+ViaMicArrayAPO.dll=SignatureAttributes.PETrust
+ViaKaraokeApo.dll=SignatureAttributes.PETrust
+VMAPO64.dll=SignatureAttributes.PETrust
+VMAPO232.dll=SignatureAttributes.PETrust
+VMAPO264.dll=SignatureAttributes.PETrust
+VMTHX64.dll=SignatureAttributes.PETrust
+VMPPLD64.DLL=SignatureAttributes.PETrust
+VMWRP64.DLL=SignatureAttributes.PETrust
+VMPPCN64.DLL=SignatureAttributes.PETrust
+VMAPO32.DLL=SignatureAttributes.PETrust
+VMTHX32.DLL=SignatureAttributes.PETrust
+VtSrdAPO.dll=SignatureAttributes.PETrust
+
+[SignatureAttributes.DRM]
+DRMLevel=1300
+[SignatureAttributes.PETrust]
+PETrust=true
+
+;============================================================================
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[VIAHDAUDIOID.NTamd64]
+%HdAudioFunctionDriver.VIAHD.DeviceDesc%    = HdAudModel, HDAUDIO\FUNC_01&VEN_1106&DEV_0428&SUBSYS_104383B3
+%HdAudioFunctionDriver.VIAHD.DeviceDesc%    = HdAudModel, HDAUDIO\FUNC_01&VEN_1106&DEV_0441&SUBSYS_104383E4
+
+
+[HdAudModel]
+Include=ks.inf,wdmaudio.inf
+Needs=KS.Registration,WDMAUDIO.Registration
+CopyFiles = HdAudModel.CopyList, HdAudProp.CopyList, HdAudShortCut.CopyList, SfxFx.CopyList, Creative.SysFx32.CopyList, Creative.Filter.CopyList, DestVIAAUD
+AddProperty=VIASysFxBranding.AddProperty
+RegisterDlls=SfxFx.RegisterDlls
+AddReg    = HdAudModel.AddReg, HdAudProp.AddReg, HdAudInit.AddReg, HdAudShortCut.AddReg, HdAudBranding.AddReg
+
+[HdAudModel.HW]
+AddReg = HdAudSecurity.AddReg, Creative.FilterHW.AddReg
+
+[HdAudModel.Services]
+AddService=VIAHdAudAddService, 0x00000002, HdAud_Service_Install
+AddService = VMfilt, 0x00000000, Filter_Service_Install
+AddService=VIAKaraokeService, 0x00000000, ViaKaraoke_Service_Install
+
+[HdAud_Service_Install]
+DisplayName   = %UAAFunctionDriverForHdAudio.SvcDesc%
+ServiceType   = 1
+StartType     = 3
+ErrorControl  = 1
+ServiceBinary = %10%\system32\drivers\viahduaa.sys
+
+[Filter_Service_Install]
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\system32\drivers\VMfilt64.sys
+
+[ViaKaraoke_Service_Install]
+DisplayName   = %ViaKaraokeSrv.SvcDesc%
+ServiceType   = 0x20
+StartType     = 2
+ErrorControl  = 1
+ServiceBinary = %10%\system32\viakaraokesrv.exe
+
+[HdAudModel.CopyList]
+viahduaa.sys
+
+[Creative.Filter.CopyList]
+VMfilt64.sys
+
+[HdAudInit.AddReg]
+;; Sample Section to Illustrate the format for Initialization verbs.
+;; Uncomment and add appropriate verbs as needed.
+;; Note that the top nibble of the verb (Codec Address) must be '0'.
+;HKR,InitVerbs,NumVerbs,0x00010001, 0x00000004 ; Example: Number of verbs in the init section
+;HKR,InitVerbs,0000,    0x00010001, 0x01E71C01 ; Sets first byte of pin config info
+;HKR,InitVerbs,0001,    0x00010001, 0x01E71D44 ; Sets second byte of pin config info
+;HKR,InitVerbs,0002,    0x00010001, 0x01E71E21 ; Sets third byte of pin config info
+;HKR,InitVerbs,0003,    0x00010001, 0x01E71F00 ; Sets fourth byte of pin config info
+
+;HKR,InitVerbs,NumVerbs,0x00010001, 0x00000001 ; Example: Number of verbs in the init section
+;HKR,InitVerbs,0000,    0x00010001, 0x001F7301 ; Set ADC DC-Offset Removal Control bit
+
+;;
+;; Init cElements of Mic Array
+;;
+HKR,ViaMicArray,NumInitcE,0x00010001, 0x00000002 ; Number of Init cElements in the init section
+HKR,ViaMicArray,usType_nE00,0x00010001, 0x00000002 ; Set the Usage Type of cElement 0
+HKR,ViaMicArray,wXCoord_nE00,0x00010001, 0x00000000 ; Set the distance of X Coord. of cElement 0
+HKR,ViaMicArray,wYCoord_nE00,0x00010001, 0xFFFFFFCE ; Set the distance of Y Coord. of cElement 0
+HKR,ViaMicArray,wZCoord_nE00,0x00010001, 0x00000000 ; Set the distance of Z Coord. of cElement 0
+HKR,ViaMicArray,wVerticalAngle_nE00,0x00010001, 0x00000000 ; Set the Vertical Angle of cElement 0
+HKR,ViaMicArray,wHorizontalAngle_nE00,0x00010001, 0x00000000 ; Set the Horizontal Angle of cElement 0
+
+HKR,ViaMicArray,usType_nE01,0x00010001, 0x00000002 ; Set the Usage Type of cElement 1
+HKR,ViaMicArray,wXCoord_nE01,0x00010001, 0x00000000 ; Set the distance of X Coord. of cElement 1
+HKR,ViaMicArray,wYCoord_nE01,0x00010001, 0x00000032 ; Set the distance of Y Coord. of cElement 1
+HKR,ViaMicArray,wZCoord_nE01,0x00010001, 0x00000000 ; Set the distance of Z Coord. of cElement 1
+HKR,ViaMicArray,wVerticalAngle_nE01,0x00010001, 0x00000000 ; Set the Vertical Angle of cElement 1
+HKR,ViaMicArray,wHorizontalAngle_nE01,0x00010001, 0x00000000 ; Set the Horizontal Angle of cElement 1
+
+[HdAudShortCut.CopyList]
+
+[HdAudShortCut.AddReg]
+
+[HdAudModel.AddReg]
+HKR,,AssociatedFilters,,"wdmaud,swmidi,redbook"
+HKR,,Driver,,viahduaa.sys
+
+HKLM,%MediaCategories%\%VIAGUID.Mic2%,Name,,%VIAPin.Mic2%
+HKLM,%MediaCategories%\%VIAGUID.Mic2%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.GenAngIn%,Name,,%VIAPin.GenAngIn%
+HKLM,%MediaCategories%\%VIAGUID.GenAngIn%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.PCBeepIn%,Name,,%VIAPin.PCBeepIn%
+HKLM,%MediaCategories%\%VIAGUID.PCBeepIn%,Display,1,00,00,00,00
+
+; speaker 9,10chan
+HKLM,%MediaCategories%\%VIAGUID.Speaker910%,Name,,%VIAPin.Speaker910%
+HKLM,%MediaCategories%\%VIAGUID.Speaker910%,Display,1,00,00,00,00
+
+; Headphone name
+HKLM,%MediaCategories%\%VIAGUID.Headphone%,Name,,%VIAPin.Headphone%
+HKLM,%MediaCategories%\%VIAGUID.Headphone%,Display,1,00,00,00,00
+
+; CD Audio name
+HKLM,%MediaCategories%\%VIAGUID.CDAudio%,Name,,%VIAPin.CDAudio%
+HKLM,%MediaCategories%\%VIAGUID.CDAudio%,Display,1,00,00,00,00
+
+; Microphone name
+HKLM,%MediaCategories%\%VIAGUID.Microphone%,Name,,%VIAPin.Microphone%
+HKLM,%MediaCategories%\%VIAGUID.Microphone%,Display,1,00,00,00,00
+
+; Line In name
+HKLM,%MediaCategories%\%VIAGUID.LineIn%,Name,,%VIAPin.LineIn%
+HKLM,%MediaCategories%\%VIAGUID.LineIn%,Display,1,00,00,00,00
+
+; Front Microphone customized name
+HKLM,%MediaCategories%\%VIAGUID.FrontMicrophone%,Name,,%VIAPin.FrontMicrophone%
+HKLM,%MediaCategories%\%VIAGUID.FrontMicrophone%,Display,1,00,00,00,00
+
+; Internal Speaker/Headphone name
+HKLM,%MediaCategories%\%VIAGUID.InterSpkrHeadphone%,Name,,%VIAPin.InterSpkrHeadphone%
+HKLM,%MediaCategories%\%VIAGUID.InterSpkrHeadphone%,Display,1,00,00,00,00
+
+;; WDM Multi-channel Pin
+
+HKLM,%MediaCategories%\%VIAGUID.Back%,Name,,%VIAPin.Back%
+HKLM,%MediaCategories%\%VIAGUID.Back%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.CntrLfe%,Name,,%VIAPin.CntrLfe%
+HKLM,%MediaCategories%\%VIAGUID.CntrLfe%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.MonoBass%,Name,,%VIAPin.MonoBass%
+HKLM,%MediaCategories%\%VIAGUID.MonoBass%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.Side%,Name,,%VIAPin.Side%
+HKLM,%MediaCategories%\%VIAGUID.Side%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.Front%,Name,,%VIAPin.Front%
+HKLM,%MediaCategories%\%VIAGUID.Front%,Display,1,00,00,00,00
+
+; Digital Mic
+HKLM,%MediaCategories%\%VIAGUID.DMic%,Name,,%VIAPin.DMic%
+HKLM,%MediaCategories%\%VIAGUID.DMic%,Display,1,00,00,00,00
+
+; SPDIF TX0
+HKLM,%MediaCategories%\%VIAGUID.STX0%,Name,,%VIAPin.STX0%
+HKLM,%MediaCategories%\%VIAGUID.STX0%,Display,1,00,00,00,00
+
+; SPDIF TX1
+HKLM,%MediaCategories%\%VIAGUID.STX1%,Name,,%VIAPin.STX1%
+HKLM,%MediaCategories%\%VIAGUID.STX1%,Display,1,00,00,00,00
+
+; SPDIF/HDMI TX0/TX1
+HKLM,%MediaCategories%\%VIAGUID.DSTX0%,Name,,%VIAPin.DSTX0%
+HKLM,%MediaCategories%\%VIAGUID.DSTX0%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.DSTX1%,Name,,%VIAPin.DSTX1%
+HKLM,%MediaCategories%\%VIAGUID.DSTX1%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.DHDMITX0%,Name,,%VIAPin.DHDMITX0%
+HKLM,%MediaCategories%\%VIAGUID.DHDMITX0%,Display,1,00,00,00,00
+
+HKLM,%MediaCategories%\%VIAGUID.DHDMITX1%,Name,,%VIAPin.DHDMITX1%
+HKLM,%MediaCategories%\%VIAGUID.DHDMITX1%,Display,1,00,00,00,00
+
+; Mono Out
+HKLM,%MediaCategories%\%VIAGUID.DMonoOut%,Name,,%VIAPin.DMonoOut%
+HKLM,%MediaCategories%\%VIAGUID.DMonoOut%,Display,1,00,00,00,00
+
+; Int Mic Vista
+HKLM,%MediaCategories%\%VIAGUID.IntMicVista%,Name,,%VIAPin.IntMicVista%
+HKLM,%MediaCategories%\%VIAGUID.IntMicVista%,Display,1,00,00,00,00
+
+; Int DMic Vista
+HKLM,%MediaCategories%\%VIAGUID.IntDMicVista%,Name,,%VIAPin.IntDMicVista%
+HKLM,%MediaCategories%\%VIAGUID.IntDMicVista%,Display,1,00,00,00,00
+
+; Int FMic Vista
+HKLM,%MediaCategories%\%VIAGUID.IntFMicVista%,Name,,%VIAPin.IntFMicVista%
+HKLM,%MediaCategories%\%VIAGUID.IntFMicVista%,Display,1,00,00,00,00
+
+; PC Beep Name
+HKLM,%MediaCategories%\%VIAGUID.PCBeepName%,Name,,%VIAPin.PCBeepName%
+HKLM,%MediaCategories%\%VIAGUID.PCBeepName%,Display,1,00,00,00,00
+
+HKR,Drivers,SubClasses,,"wave,midi,mixer,aux"
+
+HKR,Drivers\wave\wdmaud.drv,Driver,,wdmaud.drv
+HKR,Drivers\midi\wdmaud.drv,Driver,,wdmaud.drv
+HKR,Drivers\mixer\wdmaud.drv,Driver,,wdmaud.drv
+HKR,Drivers\aux\wdmaud.drv,Driver,,wdmaud.drv
+
+HKR,Drivers\wave\wdmaud.drv,Description,,%HdAudioDeviceDescription%
+HKR,Drivers\midi\wdmaud.drv,Description,,%HdAudioDeviceDescription%
+HKR,Drivers\mixer\wdmaud.drv,Description,,%HdAudioDeviceDescription%
+HKR,Drivers\aux\wdmaud.drv,Description,,%HdAudioDeviceDescription%
+
+;HKR,,SetupPreferredAudioDevices,3,01,00,00,00
+HKR,,DisableSetupDiChangeState,1,00,00,00,00 ; Set to 01,00,00,00 to disable proppage restarting of driver on policy change
+; Driver global settings
+HKR,GlobalSettings,DcOffsetWorkaround,1,01,00,00,00 ; Applies workaround for recording DC offset issue
+HKR,GlobalSettings,ResetAudioFgOnStart,1,01,00,00,00 ; Enables resetting of audio FG on driver start
+HKR,GlobalSettings,SysAudioTopoMiniportWorkaround,1,00,00,00,00 ; Enables holding ref on topo port & miniport when device is uninstantiated
+
+HKR,GlobalSettings,ValidateCodecWrites,1,00,00,00,00 ; Enables readback of writes to codec registers
+HKR,GlobalSettings,SendFakePcxCfgDefVerbs,1,00,00,00,00 ; Enables sending fake pin config default table
+HKR,GlobalSettings,SpdifOutputEchosRearRenderWhenNoAc3,1,01,00,00,00 ; Slaves rear panel front channels to SPDIF
+HKR,GlobalSettings,HpShutsOffRearSpeaker,1,00,00,00,00 ; Headphone does not mute rear speakers
+HKR,GlobalSettings,HpMode,1,01,00,00,00 ; Headphone is Independent Mode at fisrt boot
+HKR,GlobalSettings,EnableDynamicDevices,1,01,00,00,00 ; Headphone will come and go dynamically.
+HKR,GlobalSettings,SetSpdifVCfg,1,01,00,00,00 ;  VCfg bit will be set on SPDIF out
+HKR,GlobalSettings,ReloadCSetting,1,01,00,00,00 ;  Reload custom setting
+HKR,GlobalSettings,RedirectHPCtrl,1,01,00,00,00 ;  Redirection HP funtion control
+HKR,GlobalSettings,CurrentRearOutChannel,1,02,00,00,00 ;  Current Rear Out Channel Config
+HKR,GlobalSettings,SwHPMdFrBt,1,01,00,00,00 ; Swtich HP mode at first boot
+
+HKR,GlobalSettings,SpkrsActive,1,01,00,00,00 ;
+HKR,GlobalSettings,IHPActive,1,01,00,00,00 ;
+
+; Driver Capabilities
+HKR,GlobalSettings\\DriverCaps,CenterLfeSwap,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvFuncSndQulty,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvFuncEQ,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvFuncBM,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvPtchMixerDisable,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvHWPinConfigEnable,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvRedirectHPEnable,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvPseudoMicBoostEnable,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvAutoMuteGainToEnd,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvStereoExpandEnabele,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvUnsolRespEnable,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvCDInAlwaysEnable,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvHPAlwaysEnable,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvEAPDFunction,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvEPDAValue,1,01,00,00,00 ; 0 for power down 1 for power up
+HKR,GlobalSettings\\DriverCaps,DrvUseMagict51,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvUseCustomCapsDevPinName,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvUseMixWidAsFrontOutVol,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvUse025dBAsStepsOfWidVolCtrl,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvFrontMIcDisableExceptCapture,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSpkrDevAsIntrSpkrHPByVt3310OnWinVis,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvIntrSpkrMode,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,MicArrayAlwaysEnable,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,FrontMicArrayAlwaysEnable,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,MicArrayAlwaysDisable,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,FrontMicArrayAlwaysDisable,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvDynamicDeviceSupported,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvFrMicAsGenAnalogInput,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvUseCDInAsPCBeep,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvPlyRecAMxIdlePowerStateChange,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvMuteAAPathJacksUnPlugged,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetHPFrOutAsN6dB,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvMicSelectSupportRTCApp,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,PCBeepInExist,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvCreateRearRenderWDM,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSwitchTo2ndSPDIFOut,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSingleMuxCaptureDevVistaSupport,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSPDIFUseAsHDMI,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSPDIFHDMISwitchSupport,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSPDIFTX2Support,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,MixerMaxVol12dB,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvADMaxVolLimit15dB,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvRecLineInMaxVolLimit15dB,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvRecMicMaxVolLimit15dB,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSPDIFHDMI2SwitchSupport,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvExChgDefaultDigDev,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvExChgDefaultDig2Dev,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSPDIFTX0IsHDMI,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvPlyRecAMxIdlePowerStateChangeVT3397,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvFrontVolCtrlAngMixerOut,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvAutoMuteGainToEndDigVol,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetRecMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvRecMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetRecLineInMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvRecLineInMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetRecMicrophoneMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvRecMicrophoneMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetRecCDInMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvRecCDInMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetRecStereoMixerMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvRecStereoMixerMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvWidgetsPowerDownAtUnload,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvHWDigVolZipPatch,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvOEMNBCase,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvCaplessHPGPIODetect,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetSpeakerMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvSpeakerMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetIndpHPMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvIndpHPMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvMSICase,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvDMicSoftGain,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,PCBeepMute,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,StereoMixerExist,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,RearRenderHasFrontMicrophone,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,RearRenderHasFrontMicrophone2,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,RearRenderHasLineIn,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,RearRenderHasMicrophone,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,RearRenderHasCDIn,1,00,00,00,00 ;
+
+HKR,GlobalSettings\\DriverCaps,DrvSetAMicMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvAMicMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetALineInMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvALineInMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetACDInMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvACDInMaxLevel,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvSetAFMicMaxLvlByIni,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvAFMicMaxLevel,0x00010001,0x00000000 ;
+
+HKR,GlobalSettings\\DriverCaps,DrvHPProtect,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvHPProtectGain,0x00010001,0x00000000 ;
+HKR,GlobalSettings\\DriverCaps,DrvRecMuxSelectFix,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvAutoPlugOutInRetaskJack,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,Drv2ChRenderOnIndpHP,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvAzComSetDigitalDevByBIOS,1,00,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvAzComPowerSequence,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DrvAzComFrontOutPathPowerUp,1,00,00,00,00 ;
+
+HKR,GlobalSettings\\DriverCaps,DrvAzComIdlePowerState,1,01,00,00,00;
+HKR,GlobalSettings\\DriverCaps,DrvAzComHSFMicTypeAsMic,1,00,00,00,00;
+HKR,GlobalSettings\\DriverCaps,DrvAzCom3JacksAs71,1,00,00,00,00;
+HKR,GlobalSettings\\DriverCaps,DrvCaps5JacksAs71,1,00,00,00,00;
+
+
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates8000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates11025,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates16000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates22050,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates32000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates44100,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates48000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates88200,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates96000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates176400,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanSampleRates192000,1,01,00,00,00 ;
+
+
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates8000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates11025,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates16000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates22050,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates32000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates44100,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates48000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates88200,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates96000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates176400,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderSampleRates192000,1,01,00,00,00 ;
+
+
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates8000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates11025,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates16000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates22050,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates32000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates44100,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates48000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates88200,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates96000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates176400,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureSampleRates192000,1,01,00,00,00 ;
+
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates8000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates11025,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates16000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates22050,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates32000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates44100,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates48000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates88200,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates96000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates176400,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureSampleRates192000,1,01,00,00,00 ;
+
+
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates8000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates11025,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates16000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates22050,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates32000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates44100,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates48000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates88200,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates96000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates176400,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2SampleRates192000,1,01,00,00,00 ;
+
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates8000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates11025,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates16000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates22050,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates32000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates44100,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates48000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates88200,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates96000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates176400,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputSampleRates192000,1,01,00,00,00 ;
+
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates8000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates11025,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates16000,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates22050,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates32000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates44100,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates48000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates88200,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates96000,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates176400,1,01,00,00,00 ;
+HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputSampleRates192000,1,01,00,00,00 ;
+
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanBitDepths16,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanBitDepths20,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanBitDepths24,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelRender8ChanBitDepths32,1,01,00,00,00 ;
+
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderBitDepths16,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderBitDepths20,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderBitDepths24,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelRenderBitDepths32,1,01,00,00,00 ;
+
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureBitDepths16,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureBitDepths20,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureBitDepths24,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeRearPanelCaptureBitDepths32,1,01,00,00,00 ;
+
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureBitDepths16,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureBitDepths20,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureBitDepths24,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCaptureBitDepths32,1,01,00,00,00 ;
+
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputBitDepths16,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputBitDepths20,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputBitDepths24,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalInputBitDepths32,1,01,00,00,00 ;
+
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputBitDepths16,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputBitDepths20,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputBitDepths24,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeDigitalOutputBitDepths32,1,01,00,00,00 ;
+
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2BitDepths16,1,01,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2BitDepths20,1,00,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2BitDepths24,1,00,00,00,00 ;
+;HKR,GlobalSettings\\DriverCaps,DisableeFrontPanelCapture2BitDepths32,1,00,00,00,00 ;
+
+HKR,PowerSettings,ConservationIdleTime,1,1e,00,00,00
+HKR,PowerSettings,PerformanceIdleTime,1,2c,01,00,00
+HKR,PowerSettings,IdlePowerState,1,01,00,00,00
+
+[HdAudProp.CopyList]
+
+[HdAudProp.AddReg]
+
+[HdAudBranding.AddReg]
+
+[HdAudModel.Interfaces]
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_RearLineOutWave%, HdAudModel.RearLineOutWave
+AddInterface=%KSCATEGORY_RENDER%,%KSNAME_RearLineOutWave%, HdAudModel.RearLineOutWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_RearLineOutWave%, HdAudModel.RearLineOutWave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_RearLineOutWave2%, HdAudModel.RearLineOutWave2
+AddInterface=%KSCATEGORY_RENDER%,%KSNAME_RearLineOutWave2%, HdAudModel.RearLineOutWave2
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_RearLineOutWave2%, HdAudModel.RearLineOutWave2
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_RearLineOutTopo%, HdAudModel.RearLineOutTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_RearLineOutTopo%, HdAudModel.RearLineOutTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_RearLineOutTopo2%, HdAudModel.RearLineOutTopo2
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_RearLineOutTopo2%, HdAudModel.RearLineOutTopo2
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_RearLineInWave%, HdAudModel.RearLineInWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_RearLineInWave%, HdAudModel.RearLineInWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_RearLineInWave%, HdAudModel.RearLineInWave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_RearLineInTopo%, HdAudModel.RearLineInTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_RearLineInTopo%, HdAudModel.RearLineInTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_FrontPanelHeadphoneWave%, HdAudModel.FrontPanelHeadphoneWave
+AddInterface=%KSCATEGORY_RENDER%,%KSNAME_FrontPanelHeadphoneWave%, HdAudModel.FrontPanelHeadphoneWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_FrontPanelHeadphoneWave%, HdAudModel.FrontPanelHeadphoneWave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_FrontPanelHeadphoneTopo%, HdAudModel.FrontPanelHeadphoneTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_FrontPanelHeadphoneTopo%, HdAudModel.FrontPanelHeadphoneTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_FrontPanelMicWave%, HdAudModel.FrontPanelMicWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_FrontPanelMicWave%, HdAudModel.FrontPanelMicWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_FrontPanelMicWave%, HdAudModel.FrontPanelMicWave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_FrontPanelMicTopo%, HdAudModel.FrontPanelMicTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_FrontPanelMicTopo%, HdAudModel.FrontPanelMicTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_DigitalOutputWave%, HdAudModel.DigitalOutputWave
+AddInterface=%KSCATEGORY_RENDER%,%KSNAME_DigitalOutputWave%, HdAudModel.DigitalOutputWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_DigitalOutputWave%, HdAudModel.DigitalOutputWave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_DigitalOutputTopo%, HdAudModel.DigitalOutputTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_DigitalOutputTopo%, HdAudModel.DigitalOutputTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_DigitalOutput2Wave%, HdAudModel.DigitalOutput2Wave
+AddInterface=%KSCATEGORY_RENDER%,%KSNAME_DigitalOutput2Wave%, HdAudModel.DigitalOutput2Wave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_DigitalOutput2Wave%, HdAudModel.DigitalOutput2Wave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_DigitalOutput2Topo%, HdAudModel.DigitalOutput2Topo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_DigitalOutput2Topo%, HdAudModel.DigitalOutput2Topo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_DigitalInputWave%, HdAudModel.DigitalInputWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_DigitalInputWave%, HdAudModel.DigitalInputWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_DigitalInputWave%, HdAudModel.DigitalInputWave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_DigitalInputTopo%, HdAudModel.DigitalInputTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_DigitalInputTopo%, HdAudModel.DigitalInputTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_MicArrayWave%, HdAudModel.MicArrayWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_MicArrayWave%, HdAudModel.MicArrayWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_MicArrayWave%, HdAudModel.MicArrayWave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_MicArrayTopo%, HdAudModel.MicArrayTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_MicArrayTopo%, HdAudModel.MicArrayTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_AuxInWave%, AzAudModel.AuxInWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_AuxInWave%, AzAudModel.AuxInWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_AuxInWave%, AzAudModel.AuxInWave
+;
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_AuxInTopo%, AzAudModel.AuxInTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_AuxInTopo%, AzAudModel.AuxInTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_DigitalMicWave%, AzAudModel.DigitalMicWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_DigitalMicWave%, AzAudModel.DigitalMicWave
+; WaveRT
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_DigitalMicWave%, AzAudModel.DigitalMicWave
+;
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_DigitalMicTopo%, AzAudModel.DigitalMicTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_DigitalMicTopo%, AzAudModel.DigitalMicTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_MonoOutWave%, AzAudModel.MonoOutWave
+AddInterface=%KSCATEGORY_RENDER%,%KSNAME_MonoOutWave%, AzAudModel.MonoOutWave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_MonoOutWave%, AzAudModel.MonoOutWave
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_MonoOutTopo%, AzAudModel.MonoOutTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_MonoOutTopo%, AzAudModel.MonoOutTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_IntMicWave%, AzAudModel.IntMicWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_IntMicWave%, AzAudModel.IntMicWave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_IntMicWave%, AzAudModel.IntMicWave
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_IntMicTopo%, AzAudModel.IntMicTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_IntMicTopo%, AzAudModel.IntMicTopo
+
+; HDMI
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_HDMIOutputWave%, HdAudModel.HDMIOutputWave
+AddInterface=%KSCATEGORY_RENDER%,%KSNAME_HDMIOutputWave%, HdAudModel.HDMIOutputWave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_HDMIOutputWave%, HdAudModel.HDMIOutputWave
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_HDMIOutputTopo%, HdAudModel.HDMIOutputTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_HDMIOutputTopo%, HdAudModel.HDMIOutputTopo
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_HDMIOutput2Wave%, HdAudModel.HDMIOutput2Wave
+AddInterface=%KSCATEGORY_RENDER%,%KSNAME_HDMIOutput2Wave%, HdAudModel.HDMIOutput2Wave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_HDMIOutput2Wave%, HdAudModel.HDMIOutput2Wave
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_HDMIOutput2Topo%, HdAudModel.HDMIOutput2Topo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_HDMIOutput2Topo%, HdAudModel.HDMIOutput2Topo
+
+; Via Capture
+;; Line-In
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaLineInCaptureWave%, AzAudModel.ViaLineInCaptureWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_ViaLineInCaptureWave%, AzAudModel.ViaLineInCaptureWave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_ViaLineInCaptureWave%, AzAudModel.ViaLineInCaptureWave
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaLineInCaptureTopo%, AzAudModel.ViaLineInCaptureTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_ViaLineInCaptureTopo%, AzAudModel.ViaLineInCaptureTopo
+
+;; Microphone
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaMicInCaptureWave%, AzAudModel.ViaMicInCaptureWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_ViaMicInCaptureWave%, AzAudModel.ViaMicInCaptureWave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_ViaMicInCaptureWave%, AzAudModel.ViaMicInCaptureWave
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaMicInCaptureTopo%, AzAudModel.ViaMicInCaptureTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_ViaMicInCaptureTopo%, AzAudModel.ViaMicInCaptureTopo
+
+;; Front Microphone
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaFrontMicCaptureWave%, AzAudModel.ViaFrontMicCaptureWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_ViaFrontMicCaptureWave%, AzAudModel.ViaFrontMicCaptureWave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_ViaFrontMicCaptureWave%, AzAudModel.ViaFrontMicCaptureWave
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaFrontMicCaptureTopo%, AzAudModel.ViaFrontMicCaptureTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_ViaFrontMicCaptureTopo%, AzAudModel.ViaFrontMicCaptureTopo
+
+;; CD-In
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaCDInCaptureWave%, AzAudModel.ViaCDInCaptureWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_ViaCDInCaptureWave%, AzAudModel.ViaCDInCaptureWave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_ViaCDInCaptureWave%, AzAudModel.ViaCDInCaptureWave
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaCDInCaptureTopo%, AzAudModel.ViaCDInCaptureTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_ViaCDInCaptureTopo%, AzAudModel.ViaCDInCaptureTopo
+
+;; Stereo Mixer
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaStereoMixerWave%, AzAudModel.ViaStereoMixerWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_ViaStereoMixerWave%, AzAudModel.ViaStereoMixerWave
+AddInterface=%KSCATEGORY_REALTIME%,%KSNAME_ViaStereoMixerWave%, AzAudModel.ViaStereoMixerWave
+
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaStereoMixerTopo%, AzAudModel.ViaStereoMixerTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_ViaStereoMixerTopo%, AzAudModel.ViaStereoMixerTopo
+
+;; Mic(internal)
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaIntMicInCaptureWave%, AzAudModel.ViaIntMicInCaptureWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_ViaIntMicInCaptureWave%, AzAudModel.ViaIntMicInCaptureWave
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaIntMicInCaptureTopo%, AzAudModel.ViaIntMicInCaptureTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_ViaIntMicInCaptureTopo%, AzAudModel.ViaIntMicInCaptureTopo
+
+;; Front Mic(internal)
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaIntFrontMicCaptureWave%, AzAudModel.ViaIntFrontMicCaptureWave
+AddInterface=%KSCATEGORY_CAPTURE%,%KSNAME_ViaIntFrontMicCaptureWave%, AzAudModel.ViaIntFrontMicCaptureWave
+AddInterface=%KSCATEGORY_AUDIO%,%KSNAME_ViaIntFrontMicCaptureTopo%, AzAudModel.ViaIntFrontMicCaptureTopo
+AddInterface=%KSCATEGORY_TOPOLOGY%,%KSNAME_ViaIntFrontMicCaptureTopo%, AzAudModel.ViaIntFrontMicCaptureTopo
+
+; Rear line out
+[HdAudModel.RearLineOutWave]
+AddReg = HdAudModel.RearLineOutWave.AddReg
+
+[HdAudModel.RearLineOutWave.AddReg]
+HKR,,FriendlyName,,%RearLineOutWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.RearLineOutWave2]
+AddReg = HdAudModel.RearLineOutWave2.AddReg
+
+[HdAudModel.RearLineOutWave2.AddReg]
+HKR,,FriendlyName,,%RearLineOutWave2DeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+;HKR,,FriendlyName,,%RearLineOutDacName%
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;IntHdAudGuid.RearLineOutDac
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%HdAudGuidRearLineOutDac%,Name,,%RearLineOutDacName%
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%HdAudGuidRearLineOutDac%,Display,1,00,00,00,00
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%HdAudGuidDisableDigitalOutput%,Name,,%DisableDigitalOutputName%
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%HdAudGuidDisableDigitalOutput%,Display,1,00,00,00,00
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%HdAudGuidDisableDigital2Output%,Name,,%DisableDigital2OutputName%
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%HdAudGuidDisableDigital2Output%,Display,1,00,00,00,00
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%HdAudGuidFrontHPOutDac%,Name,,%FrontHPOutDacName%
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%HdAudGuidFrontHPOutDac%,Display,1,00,00,00,00
+
+
+[HdAudModel.RearLineOutTopo]
+AddReg = HdAudModel.RearLineOutTopo.AddReg, SysFx.AddReg, OEMSettingsOverride.AddReg
+
+[HdAudModel.RearLineOutTopo.AddReg]
+HKR,,FriendlyName,,%RearLineOutTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.RearLineOutTopo2]
+AddReg = HdAudModel.RearLineOutTopo2.AddReg, SysFx.AddReg, OEMSettingsOverride.AddReg
+
+[HdAudModel.RearLineOutTopo2.AddReg]
+HKR,,FriendlyName,,%RearLineOutTopo2DeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Rear line in
+
+[HdAudModel.RearLineInWave]
+AddReg = HdAudModel.RearLineInWave.AddReg
+
+[HdAudModel.RearLineInWave.AddReg]
+HKR,,FriendlyName,,%RearLineInWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.RearLineInTopo]
+AddReg = HdAudModel.RearLineInTopo.AddReg, CapSysFx.AddReg, OEMAllSettingsOverride.AddReg
+
+[HdAudModel.RearLineInTopo.AddReg]
+HKR,,FriendlyName,,%RearLineInTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Front panel headphone
+
+[HdAudModel.FrontPanelHeadphoneWave]
+AddReg = HdAudModel.FrontPanelHeadphoneWave.AddReg
+
+[HdAudModel.FrontPanelHeadphoneWave.AddReg]
+HKR,,FriendlyName,,%FrontPanelHeadphoneWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.FrontPanelHeadphoneTopo]
+AddReg = HdAudModel.FrontPanelHeadphoneTopo.AddReg, SysFx.AddReg, OEMHPSettingsOverride.AddReg
+
+[HdAudModel.FrontPanelHeadphoneTopo.AddReg]
+HKR,,FriendlyName,,%FrontPanelHeadphoneTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Front panel mic
+
+[HdAudModel.FrontPanelMicWave]
+AddReg = HdAudModel.FrontPanelMicWave.AddReg
+
+[HdAudModel.FrontPanelMicWave.AddReg]
+HKR,,FriendlyName,,%FrontPanelMicWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.FrontPanelMicTopo]
+AddReg = HdAudModel.FrontPanelMicTopo.AddReg, CapSysFx.AddReg, OEMAllSettingsOverride.AddReg
+
+[HdAudModel.FrontPanelMicTopo.AddReg]
+HKR,,FriendlyName,,%FrontPanelMicTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+
+; Digital output
+
+[HdAudModel.DigitalOutputWave]
+AddReg = HdAudModel.DigitalOutputWave.AddReg
+
+[HdAudModel.DigitalOutputWave.AddReg]
+HKR,,FriendlyName,,%DigitalOutputWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.DigitalOutputTopo]
+AddReg = HdAudModel.DigitalOutputTopo.AddReg, DOutSysFx.AddReg, OEMDOutSettingsOverride.AddReg
+
+[HdAudModel.DigitalOutputTopo.AddReg]
+HKR,,FriendlyName,,%DigitalOutputTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Digital output 2
+
+[HdAudModel.DigitalOutput2Wave]
+AddReg = HdAudModel.DigitalOutput2Wave.AddReg
+
+[HdAudModel.DigitalOutput2Wave.AddReg]
+HKR,,FriendlyName,,%DigitalOutput2WaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.DigitalOutput2Topo]
+AddReg = HdAudModel.DigitalOutput2Topo.AddReg, DOutSysFx.AddReg, OEMDOutSettingsOverride.AddReg
+
+[HdAudModel.DigitalOutput2Topo.AddReg]
+HKR,,FriendlyName,,%DigitalOutput2TopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+
+; HDMI
+
+[HdAudModel.HDMIOutputWave]
+AddReg = HdAudModel.HDMIOutputWave.AddReg
+
+[HdAudModel.HDMIOutputWave.AddReg]
+HKR,,FriendlyName,,%HDMIOutputWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.HDMIOutputTopo]
+AddReg = HdAudModel.HDMIOutputTopo.AddReg, DOutSysFx.AddReg, OEMHDMIOutSettingsOverride.AddReg
+
+[HdAudModel.HDMIOutputTopo.AddReg]
+HKR,,FriendlyName,,%HDMIOutputTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; HDMI 2
+
+[HdAudModel.HDMIOutput2Wave]
+AddReg = HdAudModel.HDMIOutput2Wave.AddReg
+
+[HdAudModel.HDMIOutput2Wave.AddReg]
+HKR,,FriendlyName,,%HDMIOutput2WaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.HDMIOutput2Topo]
+AddReg = HdAudModel.HDMIOutput2Topo.AddReg, DOutSysFx.AddReg, OEMHDMIOutSettingsOverride.AddReg
+
+[HdAudModel.HDMIOutput2Topo.AddReg]
+HKR,,FriendlyName,,%HDMIOutput2TopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Digital input
+
+[HdAudModel.DigitalInputWave]
+AddReg = HdAudModel.DigitalInputWave.AddReg
+
+[HdAudModel.DigitalInputWave.AddReg]
+HKR,,FriendlyName,,%DigitalInputWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.DigitalInputTopo]
+AddReg = HdAudModel.DigitalInputTopo.AddReg, EventDrivenMode.AddReg
+
+[HdAudModel.DigitalInputTopo.AddReg]
+HKR,,FriendlyName,,%DigitalInputTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Microphone Array
+
+[HdAudModel.MicArrayWave]
+AddReg = HdAudModel.MicArrayWave.AddReg
+
+[HdAudModel.MicArrayWave.AddReg]
+HKR,,FriendlyName,,%MicArrayWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudModel.MicArrayTopo]
+AddReg = HdAudModel.MicArrayTopo.AddReg, EventDrivenMode.AddReg
+
+[HdAudModel.MicArrayTopo.AddReg]
+HKR,,FriendlyName,,%MicArrayTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Auxiliary Input
+
+[AzAudModel.AuxInWave]
+AddReg = AzAudModel.AuxInWave.AddReg
+
+[AzAudModel.AuxInWave.AddReg]
+HKR,,FriendlyName,,%AuxInWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.AuxInTopo]
+AddReg = AzAudModel.AuxInTopo.AddReg
+
+[AzAudModel.AuxInTopo.AddReg]
+HKR,,FriendlyName,,%AuxInTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Digital Mic
+[AzAudModel.DigitalMicWave]
+AddReg = AzAudModel.DigitalMicWave.AddReg
+
+[AzAudModel.DigitalMicWave.AddReg]
+HKR,,FriendlyName,,%DigitalMicWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.DigitalMicTopo]
+AddReg = AzAudModel.DigitalMicTopo.AddReg, EventDrivenMode.AddReg
+
+[AzAudModel.DigitalMicTopo.AddReg]
+HKR,,FriendlyName,,%DigitalMicTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Int Mic
+[AzAudModel.IntMicWave]
+AddReg = AzAudModel.IntMicWave.AddReg
+
+[AzAudModel.IntMicWave.AddReg]
+HKR,,FriendlyName,,%IntMicWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.IntMicTopo]
+AddReg = AzAudModel.IntMicTopo.AddReg, CapSysFx.AddReg, EventDrivenMode.AddReg
+
+[AzAudModel.IntMicTopo.AddReg]
+HKR,,FriendlyName,,%IntMicTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Mono Out
+[AzAudModel.MonoOutWave]
+AddReg = AzAudModel.MonoOutWave.AddReg
+
+[AzAudModel.MonoOutWave.AddReg]
+HKR,,FriendlyName,,%MonoOutWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.MonoOutTopo]
+AddReg = AzAudModel.MonoOutTopo.AddReg, EventDrivenMode.AddReg
+
+[AzAudModel.MonoOutTopo.AddReg]
+HKR,,FriendlyName,,%MonoOutTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+; Via Capture
+;; Line-In
+[AzAudModel.ViaLineInCaptureWave]
+AddReg = AzAudModel.ViaLineInCaptureWave.AddReg
+
+[AzAudModel.ViaLineInCaptureWave.AddReg]
+HKR,,FriendlyName,,%ViaLineInCaptureWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.ViaLineInCaptureTopo]
+AddReg = AzAudModel.ViaLineInCaptureTopo.AddReg, OEMAllSettingsOverride.AddReg
+
+[AzAudModel.ViaLineInCaptureTopo.AddReg]
+HKR,,FriendlyName,,%ViaLineInCaptureTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+;; Microphone
+[AzAudModel.ViaMicInCaptureWave]
+AddReg = AzAudModel.ViaMicInCaptureWave.AddReg
+
+[AzAudModel.ViaMicInCaptureWave.AddReg]
+HKR,,FriendlyName,,%ViaMicInCaptureWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.ViaMicInCaptureTopo]
+AddReg = AzAudModel.ViaMicInCaptureTopo.AddReg, OEMAllSettingsOverride.AddReg
+
+[AzAudModel.ViaMicInCaptureTopo.AddReg]
+HKR,,FriendlyName,,%ViaMicInCaptureTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+;; Front Microphone
+[AzAudModel.ViaFrontMicCaptureWave]
+AddReg = AzAudModel.ViaFrontMicCaptureWave.AddReg
+
+[AzAudModel.ViaFrontMicCaptureWave.AddReg]
+HKR,,FriendlyName,,%ViaFrontMicCaptureWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.ViaFrontMicCaptureTopo]
+AddReg = AzAudModel.ViaFrontMicCaptureTopo.AddReg, OEMAllSettingsOverride.AddReg
+
+[AzAudModel.ViaFrontMicCaptureTopo.AddReg]
+HKR,,FriendlyName,,%ViaFrontMicCaptureTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+;; Microphone(internal)
+[AzAudModel.ViaIntMicInCaptureWave]
+AddReg = AzAudModel.ViaIntMicInCaptureWave.AddReg
+
+[AzAudModel.ViaIntMicInCaptureWave.AddReg]
+HKR,,FriendlyName,,%ViaIntMicInCaptureWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.ViaIntMicInCaptureTopo]
+AddReg = AzAudModel.ViaIntMicInCaptureTopo.AddReg, CapSysFx.AddReg, OEMAllSettingsOverride.AddReg
+
+[AzAudModel.ViaIntMicInCaptureTopo.AddReg]
+HKR,,FriendlyName,,%ViaIntMicInCaptureTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+;; Front Microphone(internal)
+[AzAudModel.ViaIntFrontMicCaptureWave]
+AddReg = AzAudModel.ViaIntFrontMicCaptureWave.AddReg
+
+[AzAudModel.ViaIntFrontMicCaptureWave.AddReg]
+HKR,,FriendlyName,,%ViaIntFrontMicCaptureWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.ViaIntFrontMicCaptureTopo]
+AddReg = AzAudModel.ViaIntFrontMicCaptureTopo.AddReg, CapSysFx.AddReg, OEMAllSettingsOverride.AddReg
+
+[AzAudModel.ViaIntFrontMicCaptureTopo.AddReg]
+HKR,,FriendlyName,,%ViaIntFrontMicCaptureTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+;; CD-In
+[AzAudModel.ViaCDInCaptureWave]
+AddReg = AzAudModel.ViaCDInCaptureWave.AddReg
+
+[AzAudModel.ViaCDInCaptureWave.AddReg]
+HKR,,FriendlyName,,%ViaCDInCaptureWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.ViaCDInCaptureTopo]
+AddReg = AzAudModel.ViaCDInCaptureTopo.AddReg, OEMAllSettingsOverride.AddReg
+
+[AzAudModel.ViaCDInCaptureTopo.AddReg]
+HKR,,FriendlyName,,%ViaCDInCaptureTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+;; Stereo Mixer
+[AzAudModel.ViaStereoMixerWave]
+AddReg = AzAudModel.ViaStereoMixerWave.AddReg
+
+[AzAudModel.ViaStereoMixerWave.AddReg]
+HKR,,FriendlyName,,%ViaStereoMixerWaveDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[AzAudModel.ViaStereoMixerTopo]
+AddReg = AzAudModel.ViaStereoMixerTopo.AddReg, OEMAllSettingsOverride.AddReg
+
+[AzAudModel.ViaStereoMixerTopo.AddReg]
+HKR,,FriendlyName,,%ViaStereoMixerTopoDeviceName%
+HKR,,CLSID,,%Proxy.CLSID%
+
+[HdAudSecurity.AddReg]
+; FILE_DEVICE_SOUND
+HKR,,DeviceType,0x10001,0x0000001D
+; SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_RWX_RES_RWX
+HKR,,Security,,"D:P(A;;GA;;;SY)(A;;GRGWGX;;;BA)(A;;GRGWGX;;;WD)(A;;GRGWGX;;;RC)"
+
+;;
+;; Copy custom SYSFX and property page
+;;
+
+[VIASysFxBranding.AddProperty]
+;;
+;; PKEY_DriverPackage_BrandingIcon, could also use {CF73BB51-3ABF-44A2-85E0-9A3DC7A12132},7,,,"VIAPropPageExt.dll,-200"
+;;
+DeviceBrandingIcon,,,,"%1%\VIAPropPageExt.dll,-200"
+
+;;
+;; PKEY_DrvPkg_VendorWebSite, could also use {CF73BB51-3ABF-44A2-85E0-9A3DC7A12132},3,,,"http://www.microsoft.com/whdc/device/audio/default.mspx"
+;;
+DeviceVendorWebSite,,,,"http://www.viatech.com.tw"
+
+[SfxFx.CopyList]
+VIASysFx.dll
+VIAPropPageExt.dll
+ViaMicArrayAPO.dll
+ViaMicArrayPropPageExt.dll
+VMAPO64.DLL
+VMAPO264.DLL
+VMTHX64.DLL
+VMPPLD64.DLL
+VMWRP64.DLL
+VMPPCN64.DLL
+ViaKaraokeApo.dll
+ViaKaraokePropPageExt.dll
+ViakaraokeSrv.exe
+VtSrdAPO.dll
+PropPageExt.dll
+
+[Creative.SysFx32.CopyList]
+VMAPO232.DLL
+VMAPO32.DLL
+VMTHX32.DLL
+
+;;
+;; Register custom SYSFX and property page
+;;
+[SfxFx.RegisterDlls]
+11,,VIASysFx.dll,1
+11,,VIAPropPageExt.dll,1
+11,,ViaMicArrayAPO.dll,1
+11,,ViaMicArrayPropPageExt.dll,1
+11,,VMWRP64.DLL,1
+11,,VMPPCN64.DLL,1
+11,,ViaKaraokeApo.dll,1
+11,,ViaKaraokePropPageExt.dll,1
+11,,VtSrdAPO.dll,1
+11,,PropPageExt.dll,1
+
+;;
+;; The audio engine does not normally load an unsigned sAPO. However,
+;; signing is not done until the development process is complete and the driver
+;; has been submitted to WHQL. For development and test purposes, the signing
+;; requirement can be bypassed by setting the DisableProtectedAudioDG registry
+;; value to 1
+;;
+[DisableProtectedAudioDG.AddReg]
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Audio,DisableProtectedAudioDG,0x00010001,1
+
+;;
+;; All FX\\0 entries in the same grouping
+;;
+;; VIA APO Case Only
+;;[SysFx.AddReg]
+;;HKR,"FX\\0",%PKEY_ItemNameDisplay%,,%SYSFX_FriendlyName%
+;;HKR,"FX\\0",%PKEY_SYSFX_PreMixClsid%,,%SYSFX_PREMIX_CLSID%
+;;;HKR,"FX\\0",%PKEY_SYSFX_PostMixClsid%,,%SYSFX_POSTMIX_CLSID%
+;;HKR,"FX\\0",%PKEY_SYSFX_UiClsid%,,%SYSFX_UI_CLSID%
+;;HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_ANY%  ; GUID NULL means install on all endpoints
+                                                        ; supply a specific GUID to install on a particular bridge pin node type
+
+
+[SysFx.AddReg]
+HKR,"FX\\0",%PKEY_ItemNameDisplay%,,%SYSFX_FriendlyName%
+HKR,"FX\\0",%PKEY_SYSFX_PreMixClsid%,,%CT_SYSFX_PREMIX_CLSID%
+HKR,"FX\\0",%PKEY_SYSFX_PostMixClsid%,,%CT_SYSFX_POSTMIX_CLSID%
+HKR,"FX\\0",%PKEY_SYSFX_UiClsid%,,%CT_SYSFX_UI_CLSID%
+HKR,"FX\\0",%PKEY_GFX_APO1%,,%GUID_CT_APO_GFX%
+HKR,"FX\\0",%PKEY_LFX_APO1%,,%GUID_CT_APO_LFX%
+HKR,"FX\\0",%PKEY_UI_APO1%,,%GUID_VIA_APO_UI%
+HKR,"FX\\0",%PKEY_GFX_APO2%,,%GUID_VIA_APO_GFX%
+HKR,"FX\\0",%PKEY_LFX_APO2%,,%GUID_VIA_APO_LFX%
+HKR,"FX\\0",%PKEY_UI_APO2%,,%GUID_CT_APO_UI%
+HKR,"FX\\0",%PKEY_APO_NUM%,0x10001,%NUM_APO_SET2%
+HKR,"FX\\0",%PKEY_CT_APO_CUSTOM_KEY%,,%CT_APO_CUSTOM_VALUE%
+HKR,"EP\\0",%PKEY_VMAPO_RENDER_EFFECTID%,,%GUID_VMAPO_RENDER_EFFECTID%
+HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_ANY%  ; GUID NULL means install on all endpoints
+                                                        ; supply a specific GUID to install on a particular bridge pin node type
+
+HKR,FX\0,%PKEY_FX_StreamEffectClsid%,,%SYSFX_PREMIX_CLSID%
+HKR,FX\0,%PKEY_FX_ModeEffectClsid%,,%SYSFX_POSTMIX_CLSID%
+
+; Driver developer would replace the list of supported processing modes here
+HKR,FX\0,%PKEY_SFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
+HKR,FX\0,%PKEY_MFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
+
+;
+; Digital Output Device - GFX
+;
+[DOutSysFx.AddReg]
+HKR,"FX\\0",%PKEY_ItemNameDisplay%,,%SYSFX_FriendlyProName%
+HKR,"FX\\0",%PKEY_SYSFX_PreMixClsid%,,%CT_SYSFX_PREMIX_CLSID%
+HKR,"FX\\0",%PKEY_SYSFX_PostMixClsid%,,%CT_SYSFX_POSTMIX_CLSID%
+;HKR,"FX\\0",%PKEY_SYSFX_UiClsid%,,%CT_SYSFX_UI_CLSID%
+HKR,"FX\\0",%PKEY_GFX_APO1%,,%GUID_CT_APO_GFX%
+HKR,"FX\\0",%PKEY_LFX_APO1%,,%GUID_CT_APO_LFX%
+;HKR,"FX\\0",%PKEY_UI_APO1%,,%SYSFX_UI_CLSID%
+;HKR,"FX\\0",%PKEY_GFX_APO2%,,%SYSFX_DOUT_POSTMIX_CLSID%
+;HKR,"FX\\0",%PKEY_LFX_APO2%,,%SYSFX_DOUT_PREMIX_CLSID%
+;HKR,"FX\\0",%PKEY_UI_APO1%,,%GUID_CT_APO_UI%
+HKR,"FX\\0",%PKEY_APO_NUM%,0x10001,%NUM_APO_SET1%
+HKR,"FX\\0",%PKEY_CT_APO_CUSTOM_KEY%,,%CT_APO_CUSTOM_VALUE%
+HKR,"EP\\0",%PKEY_VMAPO_RENDER_EFFECTID%,,%GUID_VMAPO_RENDER_EFFECTID%
+HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_ANY%  ; GUID NULL means install on all endpoints
+                                                        ; supply a specific GUID to install on a particular bridge pin node type
+                                                        
+HKR,FX\0,%PKEY_FX_StreamEffectClsid%,,%SYSFX_DOUT_PREMIX_CLSID%
+
+; Driver developer would replace the list of supported processing modes here
+HKR,FX\0,%PKEY_SFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
+                                                   
+;
+; Capture Device - LFX
+;
+[CapSysFx.AddReg]
+HKR,"FX\\0",%PKEY_ItemNameDisplay%,,%SYSFX_FriendlyName%
+HKR,"FX\\0",%PKEY_SYSFX_PreMixClsid%,,%SYSFX_CAP_PREMIX_CLSID%
+;HKR,"FX\\0",%PKEY_SYSFX_PostMixClsid%,,%SYSFX_POSTMIX_CLSID%
+HKR,"FX\\0",%PKEY_SYSFX_UiClsid%,,%SYSFX_UI_CLSID%
+;HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_MICROPHONE%
+HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_ANY%  ; GUID NULL means install on all endpoints
+                                                        ; supply a specific GUID to install on a particular bridge pin node type
+
+HKR,"FX\\0","{8FADB274-D51D-407e-82D7-984EFF97AC64},0",0x00010001,1 
+
+; For VIA MicArraySetting
+HKR,"FX\\0",%PKEY_VIAMACAP_CPAS%,0x00010001,0x0F
+
+; Disable sysfx setting
+HKR,"FX\\0",%PKEY_AudioEndpoint_Disable_SysFx%,0x00010001,0
+
+HKR,FX\0,%PKEY_FX_StreamEffectClsid%,,%SYSFX_CAP_PREMIX_CLSID%
+
+; Driver developer would replace the list of supported processing modes here
+HKR,FX\0,%PKEY_SFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
+
+;;
+;; All EP\\0 entries in the same grouping
+;;
+;; Set default format to 48kHz, 24-bit, Stereo
+;; Add endpoint extension property page
+;;
+[OEMSettingsOverride.AddReg]
+HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_SPEAKER%
+HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,DC,05,00,08,00,20,00,16,00,18,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
+HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+[OEMHPSettingsOverride.AddReg]
+HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_HEADPHONES%
+HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,DC,05,00,08,00,20,00,16,00,18,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
+HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+[OEMDOutSettingsOverride.AddReg]
+HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_SPDIF_INTERFACE%
+HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,DC,05,00,08,00,20,00,16,00,18,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
+HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+[OEMHDMIOutSettingsOverride.AddReg]
+HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_HDMI_INTERFACE%
+HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+;HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,DC,05,00,08,00,20,00,16,00,18,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
+HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,EE,02,00,04,00,10,00,16,00,10,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
+
+
+[OEMAllSettingsOverride.AddReg]
+HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
+HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,DC,05,00,08,00,20,00,16,00,18,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
+HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+[EventDrivenMode.AddReg]
+HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
+HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+[Creative.FilterHW.AddReg]
+HKR,,"UpperFilters",0x00010000,"VMfilt"
+
+[Strings]
+VIAName = "VIA Technologies, Inc."
+DESC = "HD Audio Codec Drivers"
+MediaCategories="SYSTEM\CurrentControlSet\Control\MediaCategories"
+VIAGUID.Mic2="{B0AA96E4-2255-11D2-B544-00201860A4D7}"
+VIAPin.Mic2="Front Mic"
+
+VIAGUID.GenAngIn="{7B7193FD-222B-4a74-98F3-3EDE832A347F}"
+VIAPin.GenAngIn="Line In/Mic In"
+
+VIAGUID.PCBeepIn="{CD20B283-4F50-4469-9186-A45124F71457}"
+VIAPin.PCBeepIn="PC Beep In"
+
+VIAGUID.Speaker910="{BD5A6A06-0F53-4a52-8753-182FB1E2D6E9}"
+VIAPin.Speaker910="9 10 channel"
+
+; Headphone name
+VIAGUID.Headphone="{2C58E4D9-6488-404a-8DD5-F9EE7F622FBE}"
+VIAPin.Headphone="Headphone"
+
+; CD Audio name
+VIAGUID.CDAudio="{4033C427-5196-4824-B130-7ECCE8003789}"
+VIAPin.CDAudio="RCA Input"
+
+; Microphone name
+VIAGUID.Microphone="{B1DDD053-DE88-4eab-B5A2-66D7C78B328B}"
+VIAPin.Microphone="Rear Microphone Input"
+
+; Line In name
+VIAGUID.LineIn="{894A9D94-6F0E-473d-9763-4D699E08A4C9}"
+VIAPin.LineIn="Rear Line Input"
+
+; Front Microphone name
+VIAGUID.FrontMicrophone="{BA74D45E-94D4-4194-8750-EDCF0692D1A2}"
+VIAPin.FrontMicrophone="Front Microphone Input"
+
+; Internal Speaker/Headphone name
+VIAGUID.InterSpkrHeadphone="{20019E13-C0E9-4f4e-B0BC-E4481EFF5A03}"
+VIAPin.InterSpkrHeadphone="Internal Speaker/Headphone"
+
+;; WDM Multi-channel Pin
+
+VIAGUID.Back="{7324A192-F92B-4cdc-8922-12BA1EB19CF5}"
+VIAPin.Back="Back"
+
+VIAGUID.CntrLfe="{F87A48B2-3C3C-45b7-BE64-017B565DF94F}"
+VIAPin.CntrLfe="Center/LFE"
+
+VIAGUID.MonoBass="{FC81461C-F021-496D-BF4B-9B48F25E8C16}"
+VIAPin.MonoBass="MonoBass"
+
+VIAGUID.Side="{55F8F646-2566-43df-BEB0-5ED0FDB8A031}"
+VIAPin.Side="Side"
+
+VIAGUID.Front="{51E4D6A8-EF83-4b1e-B614-5BD9BFFB2CB5}"
+VIAPin.Front="Front"
+
+VIAGUID.DMic="{2F097D7B-EFCA-4063-8A5E-A8FEE07332E6}"
+VIAPin.DMic="Digital Mic"
+
+VIAGUID.STX0="{8C720F51-AF4D-41b6-BE77-E49ACD53A588}"
+VIAPin.STX0="SPDIF TX0"
+
+VIAGUID.STX1="{4E4063C3-1053-4815-9F4C-B972C85CC333}"
+VIAPin.STX1="SPDIF TX1"
+
+; SPDIF/HDMI TX0/TX1
+VIAGUID.DSTX0="{E387F928-0489-436f-BCC2-3D089419DC95}"
+VIAPin.DSTX0="SPDIF Interface (TX0)"
+
+VIAGUID.DSTX1="{0A3724FA-DB2A-4ac4-8A92-064E1B11D561}"
+VIAPin.DSTX1="SPDIF Interface (TX1)"
+
+VIAGUID.DHDMITX0="{CA697BAE-8C2B-4199-B08A-20A1B97A961F}"
+VIAPin.DHDMITX0="Digital Output Device (HDMI TX0)"
+
+VIAGUID.DHDMITX1="{BA452CC0-9359-4f8c-88D8-1DC96E98C9DE}"
+VIAPin.DHDMITX1="Digital Output Device (HDMI TX1)"
+
+VIAGUID.DMonoOut="{0C7D9A68-8644-41d5-8097-CE7CF17E2931}"
+VIAPin.DMonoOut="Mono Output Device"
+
+VIAGUID.IntMicVista="{74F7B083-57BA-4b36-9D1F-6757E2E94DE4}"
+VIAPin.IntMicVista="Internal Microphone"
+
+VIAGUID.IntDMicVista="{E54EBB9B-42CA-4874-BBD8-E2CA52327D13}"
+VIAPin.IntDMicVista="Internal DMicrophone"
+
+VIAGUID.IntFMicVista="{2CD6608B-B2A6-480d-A122-CF69FD7473A6}"
+VIAPin.IntFMicVista="Internal Microphone"
+
+VIAGUID.PCBeepName="{903A8736-6B22-493D-BCC6-067E95E296C5}"
+VIAPin.PCBeepName="PC Beep"
+
+VIA = "VIA Technologies, Inc."
+RunDisplayName="High Definition Audio Property Page Shortcut" ; {PlaceHolder="High Definition Audio"}
+DiskId1 = "UAA Function Driver for High Definition Audio. Installation Disk" ; {PlaceHolder="UAA","High Definition Audio"}
+HdAudioFunctionDriver.VIAHD.DeviceDesc = "VIA HD Audio(Win 10)" ; {PlaceHolder="UAA","High Definition Audio"}
+UAAFunctionDriverForHdAudio.SvcDesc = "VIA High Definition Audio Driver Service" ; {PlaceHolder="UAA","High Definition Audio"}
+ViaKaraokeSrv.SvcDesc = "VIA Karaoke digital mixer Service" ; {PlaceHolder="UAA","High Definition Audio"}
+
+RearLineOutWaveDeviceName =        "VIA HD Audio Output" ; {PlaceHolder="HD Audio"}
+RearLineOutWave2DeviceName =       "VIA HD Audio Output 2" ; {PlaceHolder="HD Audio"}
+RearLineOutDacName =               "HD Audio rear line out" ; {PlaceHolder="HD Audio"}
+RearLineInWaveDeviceName =         "VIA HD Audio Input" ; {PlaceHolder="HD Audio"}
+RearMicInWaveDeviceName =          "HD Audio rear mic" ; {PlaceHolder="HD Audio"}
+FrontPanelHeadphoneWaveDeviceName ="VIA HD Audio Headphone" ; {PlaceHolder="HD Audio"}
+FrontHPOutDacName =                "VIA HD Audio Headphone" ; {PlaceHolder="HD Audio"}
+FrontPanelMicWaveDeviceName =      "VIA HD Audio Front Mic" ; {PlaceHolder="HD Audio"}
+DigitalOutputWaveDeviceName =      "HD Audio digital out" ; {PlaceHolder="HD Audio"}
+DigitalOutput2WaveDeviceName =     "HD Audio digital out" ; {PlaceHolder="HD Audio"}
+HDMIOutputWaveDeviceName =         "HD Audio HDMI out" ; {PlaceHolder="HD Audio"}
+HDMIOutput2WaveDeviceName =        "HD Audio HDMI out" ; {PlaceHolder="HD Audio"}
+DigitalInputWaveDeviceName =       "HD Audio digital in" ; {PlaceHolder="HD Audio"}
+MicArrayWaveDeviceName =           "HD Audio mic array" ; {PlaceHolder="HD Audio"}
+AuxInWaveDeviceName =              "HD Audio aux in" ; {PlaceHolder="HD Audio"}
+DigitalMicWaveDeviceName =         "HD Audio digital mic" ; {PlaceHolder="HD Audio"}
+MonoOutWaveDeviceName =            "HD Audio mono out" ; {PlaceHolder="HD Audio"}
+IntMicWaveDeviceName =             "VIA HD Audio Internal DMic" ; {PlaceHolder="HD Audio"}
+; Via Capture
+ViaLineInCaptureWaveDeviceName =   "VIA HD Audio Line In" ; {PlaceHolder="HD Audio"}
+ViaMicInCaptureWaveDeviceName =    "VIA HD Audio Microphone" ; {PlaceHolder="HD Audio"}
+ViaFrontMicCaptureWaveDeviceName = "VIA HD Audio Front Microphone" ; {PlaceHolder="HD Audio"}
+ViaCDInCaptureWaveDeviceName =     "VIA HD Audio CD In" ; {PlaceHolder="HD Audio"}
+ViaStereoMixerWaveDeviceName =     "VIA HD Audio Stereo Mixer" ; {PlaceHolder="HD Audio"}
+ViaIntMicInCaptureWaveDeviceName = "VIA HD Audio Internal Mic" ; {PlaceHolder="HD Audio"}
+ViaIntFrontMicCaptureWaveDeviceName = "VIA HD Audio Internal Mic" ; {PlaceHolder="HD Audio"}
+
+RearLineOutTopoDeviceName =        "HD Audio rear output mixer" ; {PlaceHolder="HD Audio"}
+RearLineOutTopo2DeviceName =       "HD Audio rear output mixer 2" ; {PlaceHolder="HD Audio"}
+RearLineInTopoDeviceName =         "HD Audio rear input mixer" ; {PlaceHolder="HD Audio"}
+RearMicInTopoDeviceName =          "HD Audio rear mic mixer" ; {PlaceHolder="HD Audio"}
+FrontPanelHeadphoneTopoDeviceName ="HD Audio front headphone mixer" ; {PlaceHolder="HD Audio"}
+FrontPanelMicTopoDeviceName =      "HD Audio front mic mixer" ; {PlaceHolder="HD Audio"}
+DigitalOutputTopoDeviceName =      "HD Audio digital out mixer" ; {PlaceHolder="HD Audio"}
+DigitalOutput2TopoDeviceName =     "HD Audio digital out mixer" ; {PlaceHolder="HD Audio"}
+HDMIOutputTopoDeviceName =         "HD Audio HDMI out mixer" ; {PlaceHolder="HD Audio"}
+HDMIOutput2TopoDeviceName =        "HD Audio HDMI out mixer" ; {PlaceHolder="HD Audio"}
+DigitalInputTopoDeviceName =       "HD Audio digital in mixer" ; {PlaceHolder="HD Audio"}
+MicArrayTopoDeviceName =           "HD Audio mic array mixer" ; {PlaceHolder="HD Audio"}
+AuxInTopoDeviceName =              "HD Audio aux in mixer" ; {PlaceHolder="HD Audio"}
+DigitalMicTopoDeviceName =         "HD Audio digital mic mixer" ; {PlaceHolder="HD Audio"}
+MonoOutTopoDeviceName =            "HD Audio mono out mixer" ; {PlaceHolder="HD Audio"}
+IntMicTopoDeviceName =             "HD Audio internal mic mixer" ; {PlaceHolder="HD Audio"}
+; Via Capture
+ViaLineInCaptureTopoDeviceName =   "VIA HD Audio Line In mixer" ; {PlaceHolder="HD Audio"}
+ViaMicInCaptureTopoDeviceName =    "VIA HD Audio Microphone mixer" ; {PlaceHolder="HD Audio"}
+ViaFrontMicCaptureTopoDeviceName = "VIA HD Audio Front Microphone mixer" ; {PlaceHolder="HD Audio"}
+ViaCDInCaptureTopoDeviceName =     "VIA HD Audio CD In mixer" ; {PlaceHolder="HD Audio"}
+ViaStereoMixerTopoDeviceName =     "VIA HD Audio Stereo Mixer mixer" ; {PlaceHolder="HD Audio"}
+ViaIntMicInCaptureTopoDeviceName =    "VIA HD Audio Internal RMic mixer" ; {PlaceHolder="HD Audio"}
+ViaIntFrontMicCaptureTopoDeviceName = "VIA HD Audio Internal FMic mixer" ; {PlaceHolder="HD Audio"}
+
+DisableDigitalOutputName = "Disable Digital Output"
+DisableDigital2OutputName = "Disable Digital Out 2"
+HdAudioDeviceDescription = "VIA High Definition Audio" ; {PlaceHolder="UAA","High Definition Audio"}
+
+KSNAME_RearLineOutWave = "RearLineOutWave" ; non-localizable
+KSNAME_RearLineOutWave2 = "RearLineOutWave2" ; non-localizable
+KSNAME_RearLineInWave = "RearLineInWave" ; non-localizable
+KSNAME_FrontPanelHeadphoneWave ="FrontPanelHeadphoneWave" ; non-localizable
+KSNAME_FrontPanelMicWave = "FrontPanelMicWave" ; non-localizable
+KSNAME_DigitalOutputWave = "DigitalOutputWave" ; non-localizable
+KSNAME_DigitalOutput2Wave = "DigitalOutput2Wave" ; non-localizable
+KSNAME_HDMIOutputWave = "HDMIOutputWave" ; non-localizable
+KSNAME_HDMIOutput2Wave = "HDMIOutput2Wave" ; non-localizable
+KSNAME_DigitalInputWave = "DigitalInputWave" ; non-localizable
+KSNAME_MicArrayWave = "MicArrayWave" ; non-localizable
+KSNAME_AuxInWave = "AuxInputWave" ; non-localizable
+KSNAME_DigitalMicWave = "DigitalMicWave" ; non-localizable
+KSNAME_MonoOutWave = "MonoOutWave" ; non-localizable
+KSNAME_IntMicWave = "IntMicWave" ; non-localizable
+; Via Capture
+KSNAME_ViaLineInCaptureWave = "ViaLineInCaptureWave" ; non-localizable
+KSNAME_ViaMicInCaptureWave = "ViaMicInCaptureWave" ; non-localizable
+KSNAME_ViaFrontMicCaptureWave = "ViaFrontMicCaptureWave" ; non-localizable
+KSNAME_ViaCDInCaptureWave = "ViaCDInCaptureWave" ; non-localizable
+KSNAME_ViaStereoMixerWave = "ViaStereoMixerWave" ; non-localizable
+KSNAME_ViaIntMicInCaptureWave = "ViaIntMicInCaptureWave" ; non-localizable
+KSNAME_ViaIntFrontMicCaptureWave = "ViaIntFrontMicCaptureWave" ; non-localizable
+
+KSNAME_RearLineOutTopo = "RearLineOutTopo" ; non-localizable
+KSNAME_RearLineOutTopo2 = "RearLineOutTopo2" ; non-localizable
+KSNAME_RearLineInTopo = "RearLineInTopo" ; non-localizable
+KSNAME_FrontPanelHeadphoneTopo = "FrontPanelHeadphoneTopo" ; non-localizable
+KSNAME_FrontPanelMicTopo = "FrontPanelMicTopo" ; non-localizable
+KSNAME_DigitalOutputTopo = "DigitalOutputTopo" ; non-localizable
+KSNAME_DigitalOutput2Topo = "DigitalOutput2Topo" ; non-localizable
+KSNAME_HDMIOutputTopo = "HDMIOutputTopo" ; non-localizable
+KSNAME_HDMIOutput2Topo = "HDMIOutput2Topo" ; non-localizable
+KSNAME_DigitalInputTopo = "DigitalInputTopo" ; non-localizable
+KSNAME_MicArrayTopo = "MicArrayTopo" ; non-localizable
+KSNAME_AuxInTopo = "AuxInputTopo" ; non-localizable
+KSNAME_DigitalMicTopo = "DigitalMicTopo" ; non-localizable
+KSNAME_MonoOutTopo = "MonoOutTopo" ; non-localizable
+KSNAME_IntMicTopo = "IntMicTopo" ; non-localizable
+; Via Capture
+KSNAME_ViaLineInCaptureTopo = "ViaLineInCaptureTopo" ; non-localizable
+KSNAME_ViaMicInCaptureTopo  = "ViaMicInCaptureTopo" ; non-localizable
+KSNAME_ViaFrontMicCaptureTopo = "ViaFrontMicCaptureTopo" ; non-localizable
+KSNAME_ViaCDInCaptureTopo = "ViaCDInCaptureTopo" ; non-localizable
+KSNAME_ViaStereoMixerTopo = "ViaStereoMixerTopo" ; non-localizable
+KSNAME_ViaIntMicInCaptureTopo  = "ViaIntMicInCaptureTopo" ; non-localizable
+KSNAME_ViaIntFrontMicCaptureTopo = "ViaIntFrontMicCaptureTopo" ; non-localizable
+
+KSCATEGORY_AUDIO = "{6994AD04-93EF-11D0-A3CC-00A0C9223196}" ; non-localizable
+KSCATEGORY_RENDER = "{65E8773E-8F56-11D0-A3B9-00A0C9223196}" ; non-localizable
+KSCATEGORY_CAPTURE = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}" ; non-localizable
+KSCATEGORY_TOPOLOGY = "{DDA54A40-1E4C-11D1-A050-405705C10000}" ; non-localizable
+; Wave RT
+KSCATEGORY_REALTIME = "{EB115FFC-10C8-4964-831D-6DCB02E6F23F}" ; non-localizable
+;
+Proxy.CLSID = "{17CCA71B-ECD7-11D0-B908-00A0C9223196}" ; non-localizable
+
+HdAudGuidRearLineOutDac = "{EEF86A90-3742-4974-B8D2-5370E1C540F6}" ; non-localizable
+HdAudGuidFrontHPOutDac = "{497B34AD-D67F-411c-8076-80D5B4250D67}" ; non-localizable
+HdAudGuidDisableDigitalOutput = "{F06BB67D-5C2F-48ad-A307-B449E3B217D6}" ; non-localizable
+HdAudGuidDisableDigital2Output = "{7E80665D-50DE-41c1-92AC-A1FDED8ABC19}" ; non-localizable
+
+;;
+;; SysFx PropertyKey GUIDS
+;;
+PKEY_SYSFX_Association          = "{D04E05A6-594B-4FB6-A80D-01AF5EED7D1D},0"
+PKEY_SYSFX_PreMixClsid          = "{D04E05A6-594B-4FB6-A80D-01AF5EED7D1D},1"
+PKEY_SYSFX_PostMixClsid         = "{D04E05A6-594B-4FB6-A80D-01AF5EED7D1D},2"
+PKEY_SYSFX_UiClsid              = "{D04E05A6-594B-4FB6-A80D-01AF5EED7D1D},3"
+PKEY_ItemNameDisplay            = "{B725F130-47EF-101A-A5F1-02608C9EEBAC},10"
+PKEY_AudioEndpoint_Ext_UiClsid  = "{1DA5D803-D492-4EDD-8C23-E0C0FFEE7F0E},1"
+PKEY_AudioEndpoint_Association  = "{1DA5D803-D492-4EDD-8C23-E0C0FFEE7F0E},2"
+PKEY_AudioEndpoint_Disable_SysFx= "{1DA5D803-D492-4EDD-8C23-E0C0FFEE7F0E},5"
+PKEY_AudioEndpoint_Supports_EventDriven_Mode = "{1DA5D803-D492-4EDD-8C23-E0C0FFEE7F0E},7"
+PKEY_AudioEndpoint_ControlPanelPageProvider = "{1DA5D803-D492-4EDD-8C23-E0C0FFEE7F0E}"
+
+PKEY_FX_StreamEffectClsid   = "{D04E05A6-594B-4fb6-A80D-01AF5EED7D1D},5"
+PKEY_FX_ModeEffectClsid     = "{D04E05A6-594B-4fb6-A80D-01AF5EED7D1D},6"
+PKEY_FX_EndpointEffectClsid = "{D04E05A6-594B-4fb6-A80D-01AF5EED7D1D},7"
+
+PKEY_SFX_ProcessingModes_Supported_For_Streaming = "{D3993A3F-99C2-4402-B5EC-A92A0367664B},5"
+PKEY_MFX_ProcessingModes_Supported_For_Streaming = "{D3993A3F-99C2-4402-B5EC-A92A0367664B},6"
+;PKEY_EFX_ProcessingModes_Supported_For_Streaming = "{D3993A3F-99C2-4402-B5EC-A92A0367664B},7"
+
+
+AUDIO_SIGNALPROCESSINGMODE_DEFAULT        = "{C18E2F7E-933D-4965-B7D1-1EEF228D2AF3}"
+AUDIO_SIGNALPROCESSINGMODE_COMMUNICATIONS = "{98951333-B9CD-48B1-A0A3-FF40682D73F7}"
+AUDIO_SIGNALPROCESSINGMODE_SPEECH         = "{FC1CFC9B-B9D6-4CFA-B5E0-4BB2166878B2}"
+AUDIO_SIGNALPROCESSINGMODE_NOTIFICATION   = "{9CF2A70B-F377-403B-BD6B-360863E0355C}"
+AUDIO_SIGNALPROCESSINGMODE_MEDIA          = "{4780004E-7133-41D8-8C74-660DADD2C0EE}"
+AUDIO_SIGNALPROCESSINGMODE_MOVIE          = "{B26FEB0D-EC94-477C-9494-D1AB8E753F6E}"
+
+;;
+;; PKEY_AudioEngine_OEMFormat:  Specifies the default format that is used for rendering/capturing.
+;; vartype = VT_BLOB
+;;
+PKEY_AudioEngine_OEMFormat = "{E4870E26-3CC5-4CD2-BA46-CA0A9A70ED04},3"
+
+SYSFX_UI_CLSID      = "{90554E6A-9854-4793-8988-1C1E56350dE7}"
+SYSFX_PREMIX_CLSID  = "{AE56B3C0-3465-410b-B4D0-038F6619F13B}"
+SYSFX_POSTMIX_CLSID = "{34CA6A01-8C65-4a96-914B-C2C0EAF0D1BA}"
+SYSFX_DOUT_PREMIX_CLSID = "{0B218E48-0DE8-44ce-8F05-F3077EF3A46C}"
+SYSFX_DOUT_POSTMIX_CLSID = "{1907EE05-C7ED-4ca6-B806-FACB7E944F7D}"
+SYSFX_CAP_PREMIX_CLSID  = "{6B767CDF-EF97-4ca8-BD1B-BA06A5CB30E4}"
+SYSFX_FriendlyName  = "VIA System Effect"
+SYSFX_FriendlyProName  = "VIA System Effect Pro"
+
+; SRS IDS:
+SRS_SYSFX_UI_CLSID      = "{3EE6CC8B-9F7F-4cea-8251-997B986E2C1F}"
+SRS_SYSFX_PREMIX_CLSID  = "{176F4E15-8F7C-4833-ADED-81FAE8CCD186}"
+SRS_SYSFX_POSTMIX_CLSID = "{00000000-0000-0000-0000-000000000000}"
+
+;*******************************************************************************
+;Creative Keys
+;*******************************************************************************
+;Chaining Property Keys
+PKEY_APO_NUM      		 = "{d46c4dfd-28b8-4ab8-a45d-70399958ef26},0"
+PKEY_GFX_APO1     		 = "{e1032fc5-ddab-4c4b-9940-8a6be78a4db6},0"
+PKEY_LFX_APO1     		 = "{3a418faa-93d7-4bd8-a0d3-c784ad25476a},0"
+PKEY_UI_APO1      		 = "{9a708e6f-a639-4f1c-9206-62b7018853a4},0"
+PKEY_GFX_APO2     		 = "{e1032fc5-ddab-4c4b-9940-8a6be78a4db6},1"
+PKEY_LFX_APO2     		 = "{3a418faa-93d7-4bd8-a0d3-c784ad25476a},1"
+PKEY_UI_APO2      		 = "{9a708e6f-a639-4f1c-9206-62b7018853a4},1"
+
+; Creative Chainer GUIDS
+CT_SYSFX_UI_CLSID     	 = "{7703e258-05e2-4b9c-b150-7899490df089}"
+CT_SYSFX_PREMIX_CLSID 	 = "{b6c7ecb9-8a4c-4a5b-99cc-7943fb8158f9}"
+CT_SYSFX_POSTMIX_CLSID	 = "{3ea97a2c-b519-4352-b454-b435eb882dc2}"
+
+; Creative GUIDS for chaining
+GUID_CT_APO_GFX        	 = "{3562f609-b92c-4664-abe6-c5759505b5f9}"
+GUID_CT_APO_LFX        	 = "{f8e361b6-0569-49ba-b98d-1f0f9954953b}"
+GUID_CT_APO_UI         	 = "{8946cc7a-7e70-4bd3-9a8e-885945371548}"
+
+; VIA GUIDS for chaining
+GUID_VIA_APO_GFX		 = "{34CA6A01-8C65-4a96-914B-C2C0EAF0D1BA}"
+GUID_VIA_APO_LFX		 = "{AE56B3C0-3465-410b-B4D0-038F6619F13B}"
+GUID_VIA_APO_UI			 = "{90554E6A-9854-4793-8988-1C1E56350dE7}"
+
+NUM_APO_SET1				 = 0x1
+NUM_APO_SET2				 = 0x2
+
+; Creative APO Custom Key 
+PKEY_CT_APO_CUSTOM_KEY   = "{35DF8779-6D98-4476-B3D3-F0FAC0E4F5BD},0"
+CT_APO_CUSTOM_VALUE = "{2D46BA67-0778-48ef-82AF-BF1DB3E45FFE}"
+
+PKEY_VMAPO_RENDER_EFFECTID = "{F1056047-B091-4d85-A5C0-B13D4D8BAC57},0"
+GUID_VMAPO_RENDER_EFFECTID = "{54a71a63-08ad-4c14-8f8e-534b6e37c650}"
+
+;******************************************************************************
+
+KSNODETYPE_ANY      = "{00000000-0000-0000-0000-000000000000}"
+KSNODETYPE_SPEAKER  = "{DFF21CE1-F70F-11D0-B917-00A0C9223196}"
+KSNODETYPE_HEADPHONES = "{DFF21CE2-F70F-11D0-B917-00A0C9223196}"
+KSNODETYPE_SPDIF_INTERFACE = "{DFF21FE5-F70F-11D0-B917-00A0C9223196}"
+KSNODETYPE_MICROPHONE = "{DFF21BE1-F70F-11D0-B917-00A0C9223196}"
+KSNODETYPE_HDMI_INTERFACE = "{D1B9CC2A-F519-417f-91C9-55FA65481001}"
+KSNODETYPE_PERSONAL_MICROPHONE = "{DFF21BE3-F70F-11D0-B917-00A0C9223196}"
+REG_BINARY          = 0x00000001
+
+; VIA MicArray Setting
+; 1 for aec, 2 for bf, 4 for ns, 8 for disable
+PKEY_VIAMACAP_CPAS	="{37E92EF7-ABF4-437d-B7BD-748BC704625B},0"
