@@ -1194,7 +1194,7 @@ DeviceBrandingIcon,,,,"%1%\VIAPropPageExt.dll,-200"
 ;;
 ;; PKEY_DrvPkg_VendorWebSite, could also use {CF73BB51-3ABF-44A2-85E0-9A3DC7A12132},3,,,"http://www.microsoft.com/whdc/device/audio/default.mspx"
 ;;
-DeviceVendorWebSite,,,,"http://www.viatech.com.tw"
+DeviceVendorWebSite,,,,"http://blog.naver.com/kgtmaven"
 
 [SfxFx.CopyList]
 VIASysFx.dll
@@ -1212,6 +1212,15 @@ ViaKaraokePropPageExt.dll
 ViakaraokeSrv.exe
 VtSrdAPO.dll
 PropPageExt.dll
+Slprop64.dll
+Sluapo64.dll
+DDPA64.dll
+DDPD64A.dll
+DDPO64A.dll
+DDPP64A.dll
+DolbyDAX2APOProp.dll
+DolbyDAX2APOv211.dll
+HiFiDAX2API.dll
 SRS_APO_Suite64.dll
 Com_SRS_WOWHD64.dll
 Com_SRS_TruSurroundXT64.dll
