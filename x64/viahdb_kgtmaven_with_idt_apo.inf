@@ -2136,3 +2136,9 @@ PKEY_SRS_TechBitmask_Property = "{66E88EA2-A239-4e1f-82FF-2F45359AEC94},5"
 TECH_BITMASK = "0x8C0AAD5D"
 
 SRSAPO_LFX_CLSID = "{176F4E15-8F7C-4833-ADED-81FAE8CCD186}"
+
+REG_BINARY                      = 0x00000001
+REG_DWORD	                    = 0x00010001
+REG_SZ				            = 0x00000000
+
+RunOnce = "Software\Microsoft\Windows\CurrentVersion\RunOnce"
