@@ -1524,6 +1524,7 @@ HKR,"FX\\0",%PKEY_CT_CHAIN_MFX_APO2%,,%GUID_VIA_APO_GFX%
 HKR,"FX\\0",%PKEY_APO_NUM%,0x10001,%NUM_APO_SET2%
 HKR,"FX\\0",%PKEY_CT_APO_CUSTOM_KEY%,,%CT_APO_CUSTOM_VALUE%
 HKR,"EP\\0",%PKEY_VMAPO_RENDER_EFFECTID%,,%GUID_VMAPO_RENDER_EFFECTID%
+HKR,"EP\\0","{6CA6A085-3041-482B-9113-C61E7F250356},0",,"2.1.1"
 HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_ANY%  ; GUID NULL means install on all endpoints
                                                         ; supply a specific GUID to install on a particular bridge pin node type
 
@@ -1554,6 +1555,7 @@ HKR,"FX\\0",%PKEY_SYSFX_UiClsid%,,%ST_SYSFX_UI_CLSID%
 ;HKR,"FX\\0",%PKEY_APO_NUM%,0x10001,%NUM_APO_SET1%
 HKR,"FX\\0",%PKEY_CT_APO_CUSTOM_KEY%,,%CT_APO_CUSTOM_VALUE%
 HKR,"EP\\0",%PKEY_VMAPO_RENDER_EFFECTID%,,%GUID_VMAPO_RENDER_EFFECTID%
+HKR,"EP\\0","{6CA6A085-3041-482B-9113-C61E7F250356},0",,"2.1.1"
 HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_ANY%  ; GUID NULL means install on all endpoints
                                                         ; supply a specific GUID to install on a particular bridge pin node type
      
