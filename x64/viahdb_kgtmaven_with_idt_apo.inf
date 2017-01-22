@@ -33,7 +33,11 @@ SRSAPO.CopyList             = 11,SRSLabs\%SRSAPO_LFX_CLSID%
 PCEE4.CopyList	            = 11
 DAX2.CopyList = 11, DAX2
 ST.DLL.CopyList=11
-CoInstaller.CopyList=11
+;x64
+SysFx.NTamd64.CopyList=11,SRSLabs\HeadphoneX
+SysFx.6.3.NTamd64.CopyList=11,SRSLabs\HeadphoneX
+SysFx.NTamd64.CoInstallers.CopyList=11,SRSLabs\HeadphoneX
+Image.CopyList=11,SRSLabs\Image
 
 [SourceDisksNames]
 222=%DiskId1%,"",222
@@ -99,6 +103,19 @@ stapi64.dll=222
 stapo64.dll=222
 stcplx64.dll=222
 stlang64.dll=222
+;x64
+DTSHpxInit64.dll=222
+slcnt64.dll=222
+sltech64.dll=222
+sl3apo64.dll=222
+SHHWrapperApo64.dll=222
+HpxPropPage64.dll=222
+;Installation Icon
+DefaultIcon.ico=222
+;Preset
+kgtmaven.xml=222
+DTSLogo.jpg=222
+SHHLogo.png=222
 
 
 [DestVIAAUD]
@@ -150,6 +167,16 @@ DDPP64A.dll=SignatureAttributes.PETrust
 DolbyDAX2APOProp.dll=SignatureAttributes.PETrust
 DolbyDAX2APOv211.dll=SignatureAttributes.PETrust
 HiFiDAX2API.dll=SignatureAttributes.PETrust
+;;DLLs
+DtsHpxInit64.dll=SignatureAttributes.PETrust
+;;DTS HPX APO
+slcnt64.dll=SignatureAttributes.PETrust
+sltech64.dll=SignatureAttributes.PETrust
+sl3apo64.dll=SignatureAttributes.PETrust
+;;Wrapper APO
+SHHWrapperApo64.dll=SignatureAttributes.PETrust
+;;Property Page
+HpxPropPage64.dll=SignatureAttributes.PETrust
 
 
 [SignatureAttributes.DRM]
@@ -171,10 +198,10 @@ ExcludeFromSelect = *
 [HdAudModel]
 Include=ks.inf,wdmaudio.inf
 Needs=KS.Registration,WDMAUDIO.Registration
-CopyFiles = HdAudModel.CopyList, HdAudProp.CopyList, HdAudShortCut.CopyList, SfxFx.CopyList, Creative.SysFx32.CopyList, SysFx.NTamd64.CopyList, Creative.Filter.CopyList, DestVIAAUD, ST.DLL.CopyList, SRSAPO.CopyList, PCEE4.CopyList, DAX2.CopyList
+CopyFiles = HdAudModel.CopyList, HdAudProp.CopyList, HdAudShortCut.CopyList, SfxFx.CopyList, Creative.SysFx32.CopyList, SysFx.NTamd64.CopyList, Creative.Filter.CopyList, DestVIAAUD, ST.DLL.CopyList, SRSAPO.CopyList, PCEE4.CopyList, DAX2.CopyList, SysFx.6.3.NTamd64.CopyList, SysFx.NTamd64.CoInstallers.CopyList, Image.CopyList
 AddProperty=VIASysFxBranding.AddProperty
-RegisterDlls=SfxFx.RegisterDlls, ST.DLL.RegisterDlls, PCEE4.RegisterDlls
-AddReg    = HdAudModel.AddReg, HdAudProp.AddReg, HdAudInit.AddReg, HdAudShortCut.AddReg, VMAPO232.AddReg, HdAudBranding.AddReg
+RegisterDlls=SfxFx.RegisterDlls, ST.DLL.RegisterDlls, PCEE4.RegisterDlls, SysFx.NTamd64.RegisterDlls
+AddReg    = HdAudModel.AddReg, HdAudProp.AddReg, HdAudInit.AddReg, HdAudShortCut.AddReg, VMAPO232.AddReg, HdAudBranding.AddReg, SysFx.CoInstallers.AddReg, SysFx.NTamd64.CoInstallers.Generic.AddReg
 
 [HdAudModel.HW]
 AddReg = HdAudSecurity.AddReg, FilterHW.AddReg
@@ -1267,6 +1294,23 @@ stapo64.dll
 stcplx64.dll
 stlang64.dll
 
+;64bits Win81
+[SysFx.6.3.NTamd64.CopyList]
+slcnt64.dll
+sltech64.dll
+sl3apo64.dll
+SHHWrapperApo64.dll
+HpxPropPage64.dll
+kgtmaven.xml
+
+[Image.CopyList]
+DTSLogo.jpg
+SHHLogo.png
+
+;64bits Win7 & Win8 & Win81
+[SysFx.NTamd64.CoInstallers.CopyList]
+DTSHpxInit64.dll
+
 ;;
 ;; Register custom SYSFX and property page
 ;;
@@ -1312,6 +1356,13 @@ stlang64.dll
 11,,stapo64.dll,1
 11,,stcplx64.dll,1
 
+;64bits Win7 & Win8 & Win81
+[SysFx.NTamd64.RegisterDlls]
+11,SRSLabs\HeadphoneX,slcnt64.dll,1
+11,SRSLabs\HeadphoneX,sl3apo64.dll,1
+11,SRSLabs\HeadphoneX,SHHWrapperApo64.dll,1
+11,SRSLabs\HeadphoneX,HpxPropPage64.dll,1
+
 ;;
 ;; The audio engine does not normally load an unsigned sAPO. However,
 ;; signing is not done until the development process is complete and the driver
@@ -1321,6 +1372,27 @@ stlang64.dll
 ;;
 [DisableProtectedAudioDG.AddReg]
 HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Audio,DisableProtectedAudioDG,0x00010001,1
+
+;;
+;; technical dll
+;;
+[DLLSysFX.NTx86.AddReg]
+HKLM,"%SRS_REGISTRY%\APO",Version,,"V3.5.10.0",
+HKLM,"%SRS_REGISTRY%\SuperHumanHearing",Version,,"V1.0.4",
+
+[DLLSysFX.NTamd64.AddReg]
+HKLM,"%SRS_REGISTRY%\APO",Version,,"V3.5.10.0",
+HKLM,"%SRS_REGISTRY%\SuperHumanHearing",Version,,"V1.0.4",
+
+;;
+;; ConInstallers details
+;;
+[SysFx.CoInstallers.AddReg]
+HKR,,CompanyName,,%PUBLISHER_NAME%
+HKR,,ProductName,,%DISPLAY_NAME%
+
+[SysFx.NTamd64.CoInstallers.Generic.AddReg]
+HKLM, SOFTWARE\%PUBLISHER_NAME%\%DISPLAY_NAME%\Application\Launch,"rundll32.exe %11%\SRSLabs\HeadphoneX\DTSHpxInit64.dll,Install",,0x00000022
 
 [SRSInstaller.AddReg]
 HKLM,"Software\SRS Labs\APO"
@@ -1530,7 +1602,14 @@ HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_ANY%  ; GUID NULL means instal
 
 HKR,FX\0,%PKEY_FX_StreamEffectClsid%,,%ST_SYSFX_PREMIX_CLSID%
 HKR,FX\0,%PKEY_FX_ModeEffectClsid%,,%ST_SYSFX_POSTMIX_CLSID%
-HKR,FX\0,%PKEY_FX_EndpointEffectClsid%,,%CT_WRAP_EFX_CLSID%
+HKR,FX\0,%PKEY_FX_EndpointEffectClsid%,,%ST_SYSFX_ENDPOINT_CLSID%
+
+;;APO State
+HKR,"FX\\0",%PKEY_Endpoint_Enable_SuperHumanHearing%,%REG_DWORD%,0x0 
+HKR,"FX\\0",%PKEY_Endpoint_Enable_SuperHumanHearing_HotKey%,%REG_DWORD%,0x0 
+HKR,"FX\\0",%PKEY_Endpoint_FilePath_SuperHumanHearing%,,"%11%\SRSLabs\SHHParameter\%SHH_FILENAME%"
+HKR,"FX\\0",%PKEY_Endpoint_HeadphoneX_SurroundOn%,%REG_DWORD%,0x1 
+HKR,"FX\\0",%PKEY_Endpoint_HeadphoneX_Vendor%,%REG_DWORD%,0x10f5
 
 ; Driver developer would replace the list of supported processing modes here
 HKR,FX\0,%PKEY_SFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
@@ -1561,7 +1640,14 @@ HKR,"FX\\0",%PKEY_SYSFX_Association%,,%KSNODETYPE_ANY%  ; GUID NULL means instal
      
 HKR,FX\0,%PKEY_FX_StreamEffectClsid%,,%ST_SYSFX_PREMIX_CLSID%
 HKR,FX\0,%PKEY_FX_ModeEffectClsid%,,%ST_SYSFX_POSTMIX_CLSID%                                                   
-HKR,FX\0,%PKEY_FX_EndpointEffectClsid%,,%GUID_CT_APO_EFX%
+HKR,FX\0,%PKEY_FX_EndpointEffectClsid%,,%ST_SYSFX_ENDPOINT_CLSID%
+
+;;APO State
+HKR,"FX\\0",%PKEY_Endpoint_Enable_SuperHumanHearing%,%REG_DWORD%,0x0 
+HKR,"FX\\0",%PKEY_Endpoint_Enable_SuperHumanHearing_HotKey%,%REG_DWORD%,0x0 
+HKR,"FX\\0",%PKEY_Endpoint_FilePath_SuperHumanHearing%,,"%11%\SRSLabs\SHHParameter\%SHH_FILENAME%"
+HKR,"FX\\0",%PKEY_Endpoint_HeadphoneX_SurroundOn%,%REG_DWORD%,0x1 
+HKR,"FX\\0",%PKEY_Endpoint_HeadphoneX_Vendor%,%REG_DWORD%,0x10f5
 
 ; Driver developer would replace the list of supported processing modes here
 HKR,FX\0,%PKEY_SFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
@@ -1605,17 +1691,41 @@ HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00
 HKR,"EP\\0", %PKEY_AudioEndpoint_SRS_UAPO_Installed%,%REG_DWORD%,1
 HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
 
+;;DTS APO Configuration
+;HKR,"EP\\0",%PKEY_DTSHPX_Association%,,Software\SRS Labs\APO\{0D490185-0EF5-4E25-9994-EF95218A851C}
+HKR,"EP\\0",%PKEY_DTSHPX_APOLocation%,,"%11%\SRSLabs\HeadphoneX"
+;HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\DTS_APO3_HPX-Cricketz_2016-04-14.xml"
+HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\kgtmaven.xml"
+;HKR,"EP\\0",%PKEY_DTSHPX_HwIdentifier%,,""
+;HKR,"EP\\0",%PKEY_DTSHPX_CodecId%,,0x0200
+
 [OEMHPSettingsOverride.AddReg]
 HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_HEADPHONES%
 HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,DC,05,00,08,00,20,00,16,00,18,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
 HKR,"EP\\0", %PKEY_AudioEndpoint_SRS_UAPO_Installed%,%REG_DWORD%,1
 HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
 
+;;DTS APO Configuration
+;HKR,"EP\\0",%PKEY_DTSHPX_Association%,,Software\SRS Labs\APO\{0D490185-0EF5-4E25-9994-EF95218A851C}
+HKR,"EP\\0",%PKEY_DTSHPX_APOLocation%,,"%11%\SRSLabs\HeadphoneX"
+;HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\DTS_APO3_HPX-Cricketz_2016-04-14.xml"
+HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\kgtmaven.xml"
+;HKR,"EP\\0",%PKEY_DTSHPX_HwIdentifier%,,""
+;HKR,"EP\\0",%PKEY_DTSHPX_CodecId%,,0x0200
+
 [OEMDOutSettingsOverride.AddReg]
 HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_SPDIF_INTERFACE%
 HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,DC,05,00,08,00,20,00,16,00,18,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
 HKR,"EP\\0", %PKEY_AudioEndpoint_SRS_UAPO_Installed%,%REG_DWORD%,1
 HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
+
+;;DTS APO Configuration
+;HKR,"EP\\0",%PKEY_DTSHPX_Association%,,Software\SRS Labs\APO\{0D490185-0EF5-4E25-9994-EF95218A851C}
+HKR,"EP\\0",%PKEY_DTSHPX_APOLocation%,,"%11%\SRSLabs\HeadphoneX"
+;HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\DTS_APO3_HPX-Cricketz_2016-04-14.xml"
+HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\kgtmaven.xml"
+;HKR,"EP\\0",%PKEY_DTSHPX_HwIdentifier%,,""
+;HKR,"EP\\0",%PKEY_DTSHPX_CodecId%,,0x0200
 
 [OEMHDMIOutSettingsOverride.AddReg]
 HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_HDMI_INTERFACE%
@@ -1624,6 +1734,14 @@ HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
 HKR,"EP\\0", %PKEY_AudioEndpoint_SRS_UAPO_Installed%,%REG_DWORD%,1
 HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00,FE,FF,02,00,80,BB,00,00,00,EE,02,00,04,00,10,00,16,00,10,00,03,00,00,00,01,00,00,00,00,00,10,00,80,00,00,AA,00,38,9B,71
 
+;;DTS APO Configuration
+;HKR,"EP\\0",%PKEY_DTSHPX_Association%,,Software\SRS Labs\APO\{0D490185-0EF5-4E25-9994-EF95218A851C}
+HKR,"EP\\0",%PKEY_DTSHPX_APOLocation%,,"%11%\SRSLabs\HeadphoneX"
+;HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\DTS_APO3_HPX-Cricketz_2016-04-14.xml"
+HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\kgtmaven.xml"
+;HKR,"EP\\0",%PKEY_DTSHPX_HwIdentifier%,,""
+;HKR,"EP\\0",%PKEY_DTSHPX_CodecId%,,0x0200
+
 
 [OEMAllSettingsOverride.AddReg]
 HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
@@ -1631,11 +1749,30 @@ HKR,"EP\\0", %PKEY_AudioEngine_OEMFormat%, %REG_BINARY%, 41,00,8C,70,28,00,00,00
 HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
 HKR,"EP\\0", %PKEY_AudioEndpoint_SRS_UAPO_Installed%,%REG_DWORD%,1
 
+;;DTS APO Configuration
+;HKR,"EP\\0",%PKEY_DTSHPX_Association%,,Software\SRS Labs\APO\{0D490185-0EF5-4E25-9994-EF95218A851C}
+HKR,"EP\\0",%PKEY_DTSHPX_APOLocation%,,"%11%\SRSLabs\HeadphoneX"
+;HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\DTS_APO3_HPX-Cricketz_2016-04-14.xml"
+HKR,"EP\\0",%PKEY_DTSHPX_XmlLocation%,,"%11%\SRSLabs\HeadphoneX\kgtmaven.xml"
+;HKR,"EP\\0",%PKEY_DTSHPX_HwIdentifier%,,""
+;HKR,"EP\\0",%PKEY_DTSHPX_CodecId%,,0x0200
+
 [EventDrivenMode.AddReg]
 HKR,"EP\\0", %PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
 HKR,"EP\\0",%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
 
 [Strings]
+ProviderName="kgtmaven"
+MfgName="kgtmaven"
+DiskDescription="DTS Headphone X APO"
+SRSAudioID="DTS Headphone X APO"
+ServiceName="DTS Headphone X APO Driver"
+
+PUBLISHER_NAME = "kgtmaven"
+DISPLAY_NAME  = "DTS Headphone X APO"
+UNINSTALL_UI_PATH = "DTS Headphone X APO"
+VERSION_INFO = "1.2.0.1"
+
 VIAName = "Modded by kgtmaven"
 DESC = "HD Audio Codec Drivers"
 MediaCategories="SYSTEM\CurrentControlSet\Control\MediaCategories"
@@ -1935,6 +2072,7 @@ GUID_VIA_APO_UI			 = "{90554E6A-9854-4793-8988-1C1E56350dE7}"
 ST_SYSFX_UI_CLSID          = "{09ED2575-2EC1-488b-B005-E13AE21C80E6}"
 ST_SYSFX_PREMIX_CLSID      = "{C3413380-F4BA-4afa-9BDC-F3C98BA73442}"
 ST_SYSFX_POSTMIX_CLSID     = "{BBB6B5C5-E723-4703-9A5D-92F94C5EE034}"
+ST_SYSFX_ENDPOINT_CLSID     = "{EE9C67FD-0530-48BE-B14C-533F98207CE0}"
 ST_SYSFX_FriendlyName      = "IDT Audio Effects"
 ST_CONTROLLER_EXT_UI_CLSID    = "{4BBD81D6-5FF2-47a6-9AAC-05ABE8C45598}"
 ST_AUDIOENDPOINT_EXT_UI_CLSID = "{25FFF4CD-B59A-4768-A09D-11A11A0B7DA2}"
@@ -2138,6 +2276,45 @@ PKEY_SRS_TechBitmask_Property = "{66E88EA2-A239-4e1f-82FF-2F45359AEC94},5"
 TECH_BITMASK = "0x8C0AAD5D"
 
 SRSAPO_LFX_CLSID = "{176F4E15-8F7C-4833-ADED-81FAE8CCD186}"
+
+;;
+;;APO relative
+;;
+;;PropertyPage & APO Description name Win7 & Win81 & Win10
+SYSFX_UI_CLSID      = "{C6325D42-8A01-4004-84DC-026BC0AD49EB}"
+SYSFX_FriendlyName  = "DTS Headphone X & Super Human Hearing"
+
+;;Win7 & Win8
+SYSFX_PREMIX_CLSID  = "{CB0EAF7D-3991-4921-AA30-CD32798EDC3A}"
+SYSFX_PREMIX_CLSID_SHH  = "{BD0AE140-4D61-4E40-BAB5-5F4339FB1F38}"
+
+;;Win81 & Win10
+SYSFX_StreamEffect_CLSID = "{1B917FE2-47D1-425D-A26E-AFCDBDA7A2E8}"
+SYSFX_ModeEffect_CLSID = "{134DDB7A-41FC-40E6-8D6B-E284C51D160E}"
+SYSFX_StreamEffect_SHH_CLSID = "{444BDF22-DC23-4865-97A5-F5EC0856DCA2}"
+SYSFX_ModeEffect_SHH_CLSID = "{E3D903A1-10CC-4273-8754-2A9C3934D03B}"
+SYSFX_SFXMode_CLSID = "{C18E2F7E-933D-4965-B7D1-1EEF228D2AF3}"
+SYSFX_MFXMode_CLSID = "{C18E2F7E-933D-4965-B7D1-1EEF228D2AF3}"
+SYSFX_SystemEffect_CLSID_NULL = "{00000000-0000-0000-0000-000000000000}"
+
+;;DTS APO Registry
+PKEY_DTSHPX_Association = "{7A8B74C8-FA66-4460-8542-D6119C59E9D4},0"
+PKEY_DTSHPX_APOLocation = "{7A8B74C8-FA66-4460-8542-D6119C59E9D4},1"
+PKEY_DTSHPX_XmlLocation = "{7A8B74C8-FA66-4460-8542-D6119C59E9D4},2"
+PKEY_DTSHPX_HwIdentifier = "{7A8B74C8-FA66-4460-8542-D6119C59E9D4},3"
+PKEY_DTSHPX_CodecId = "{7A8B74C8-FA66-4460-8542-D6119C59E9D4},4"
+
+;;Super Human Hearing 
+PKEY_Endpoint_Enable_SuperHumanHearing = "{9e456e7b-58bb-4cd5-9071-3dbb42e1b216},0"
+PKEY_Endpoint_Enable_SuperHumanHearing_HotKey = "{9e456e7b-58bb-4cd5-9071-3dbb42e1b216},1"
+PKEY_Endpoint_FilePath_SuperHumanHearing = "{9e456e7b-58bb-4cd5-9071-3dbb42e1b216},2"
+PKEY_Endpoint_HeadphoneX_SurroundOn = "{9e456e7b-58bb-4cd5-9071-3dbb42e1b216},3"
+PKEY_Endpoint_HeadphoneX_Vendor = "{9e456e7b-58bb-4cd5-9071-3dbb42e1b216},10"
+
+;;Super Human Hearing
+SHH_FILENAME = "SuperHumanHearingParams.txt"
+
+SRS_REGISTRY            = "Software\SRS Labs"
 
 REG_BINARY                      = 0x00000001
 REG_DWORD	                    = 0x00010001
