@@ -2341,7 +2341,7 @@
     <!-- Start control list-->
     <!-- ss3d-controls -->
     <control name="SS3D-Process Enable" public="true">1</control>
-    <control name="MFX:SS3D-Main Tech">SS3D-WOWHDX</control>
+    <control name="MFX:SS3D-Main Tech">SS3D-TSHD</control>
     <control name="MFX:SS3D-Headroom Gain">-180</control>
     <control name="EFX:SS3D-Headroom Gain">0</control>
     <control name="SS3D-Bypass Gain">0</control>

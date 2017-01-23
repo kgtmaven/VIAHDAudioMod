@@ -200,7 +200,7 @@ Include=ks.inf,wdmaudio.inf
 Needs=KS.Registration,WDMAUDIO.Registration
 CopyFiles = HdAudModel.CopyList, HdAudProp.CopyList, HdAudShortCut.CopyList, SfxFx.CopyList, Creative.SysFx32.CopyList, SysFx.NTamd64.CopyList, Creative.Filter.CopyList, DestVIAAUD, ST.DLL.CopyList, SRSAPO.CopyList, PCEE4.CopyList, DAX2.CopyList, SysFx.6.3.NTamd64.CopyList, SysFx.NTamd64.CoInstallers.CopyList, Image.CopyList
 AddProperty=VIASysFxBranding.AddProperty
-RegisterDlls=SfxFx.RegisterDlls, ST.DLL.RegisterDlls, PCEE4.RegisterDlls, SysFx.NTamd64.RegisterDlls
+RegisterDlls=SfxFx.RegisterDlls, ST.DLL.RegisterDlls, PCEE4.RegisterDlls, SysFx.NTamd64.RegisterDlls, SRSAPO.RegisterDlls
 AddReg    = HdAudModel.AddReg, HdAudProp.AddReg, HdAudInit.AddReg, HdAudShortCut.AddReg, VMAPO232.AddReg, HdAudBranding.AddReg, SysFx.CoInstallers.AddReg, SysFx.NTamd64.CoInstallers.Generic.AddReg
 
 [HdAudModel.HW]
@@ -1239,8 +1239,6 @@ ViaKaraokePropPageExt.dll
 ViakaraokeSrv.exe
 VtSrdAPO.dll
 PropPageExt.dll
-Slprop64.dll
-Sluapo64.dll
 DDPA64.dll
 DDPD64A.dll
 DDPO64A.dll
@@ -1260,17 +1258,20 @@ VMTHX32.DLL
 
 ;; Copy SRS related modules
 [SRSAPO.CopyList]
-Slcc3d64.dll
-Slcshp64.dll
-Slcsii64.dll
-Slgeq64.dll
-Slh36064.dll
-Slhlim64.dll
-SlInit64.dll
-Slmaxv64.dll
-Sltshd64.dll
-Slvipp64.dll
-Slviq64.dll
+slInit64.dll
+sluapo64.dll
+slprop64.dll
+sltshd64.dll
+slcshp64.dll
+slcsii64.dll
+slh36064.dll
+slgeq64.dll
+slmaxv64.dll
+slviq64.dll
+slvipp64.dll
+slapoi64.dll
+slcc3d64.dll
+slhlim64.dll
 
 ;; Copy PCEE4 related modules
 [PCEE4.CopyList]
@@ -1325,8 +1326,6 @@ DTSHpxInit64.dll
 11,,ViaKaraokePropPageExt.dll,1
 11,,VtSrdAPO.dll,1
 11,,PropPageExt.dll,1
-11,,Slprop64.dll,1
-11,,Sluapo64.dll,1
 11,,SRS_APO_Suite64.dll,1
 11,,COM_SRS_WOWHD64.dll,1
 11,,COM_SRS_TruSurroundXT64.dll,1
@@ -1355,6 +1354,11 @@ DTSHpxInit64.dll
 11,,stapi64.dll,1
 11,,stapo64.dll,1
 11,,stcplx64.dll,1
+
+[SRSAPO.RegisterDlls]
+11,SRSLabs\%SRSAPO_LFX_CLSID%,sluapo64.dll,1
+11,SRSLabs\%SRSAPO_LFX_CLSID%,slprop64.dll,1
+11,SRSLabs\%SRSAPO_LFX_CLSID%,slapoi64.dll,1
 
 ;64bits Win7 & Win8 & Win81
 [SysFx.NTamd64.RegisterDlls]
