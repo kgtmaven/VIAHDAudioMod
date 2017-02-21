@@ -77,10 +77,11 @@ Sltshd64.dll=222
 Sluapo64.dll=222
 Slvipp64.dll=222
 Slviq64.dll=222
-SRS_APO_Suite64.dll=222
+srs_apo_suite_toshiba64.dll=222
 Com_SRS_WOWHD64.dll=222
 Com_SRS_TruSurroundXT64.dll=222
-SRS_APO_Prop_Page64.dll=222
+Com_SRS_CSIIDecoder64.dll=222
+SRS_APO_Prop_Page_Toshiba64.dll=222
 EEL64A.dll=222
 EED64A.dll=222
 EEG64A.dll=222
@@ -107,6 +108,9 @@ MBAPO232.dll=222
 MBAPO264.dll=222
 MBWrp64.dll=222
 MBfilt64.sys=222
+RenderAPO.dll=222
+RenderPropPage.dll=222
+kgtmaven.dtscs=222
 ;x64
 DTSHpxInit64.dll=222
 slcnt64.dll=222
@@ -173,7 +177,12 @@ DolbyDAX2APOv211.dll=SignatureAttributes.PETrust
 HiFiDAX2API.dll=SignatureAttributes.PETrust
 MBAPO232.dll=SignatureAttributes.PETrust
 MBAPO264.dll=SignatureAttributes.PETrust
+srs_apo_suite_toshiba64.dll=SignatureAttributes.PETrust
+com_srs_wowhd64.dll=SignatureAttributes.PETrust
+com_srs_trusurroundxt64.dll=SignatureAttributes.PETrust
+Com_SRS_CSIIDecoder64.dll=SignatureAttributes.PETrust
 MBWrp64.dll=SignatureAttributes.PETrust
+RenderAPO.dll=SignatureAttributes.PETrust
 ;;DLLs
 DtsHpxInit64.dll=SignatureAttributes.PETrust
 ;;DTS HPX APO
@@ -208,7 +217,7 @@ Needs=KS.Registration,WDMAUDIO.Registration
 CopyFiles = HdAudModel.CopyList, HdAudProp.CopyList, HdAudShortCut.CopyList, SfxFx.CopyList, Creative.SysFx32.CopyList, SysFx.NTamd64.CopyList, Creative.Filter.CopyList, DestVIAAUD, ST.DLL.CopyList, SRSAPO.CopyList, PCEE4.CopyList, DAX2.CopyList, SysFx.6.3.NTamd64.CopyList, SysFx.NTamd64.CoInstallers.CopyList, Image.CopyList
 AddProperty=VIASysFxBranding.AddProperty
 RegisterDlls=SfxFx.RegisterDlls, ST.DLL.RegisterDlls, PCEE4.RegisterDlls, SysFx.NTamd64.RegisterDlls, SRSAPO.RegisterDlls
-AddReg    = HdAudModel.AddReg, HdAudProp.AddReg, HdAudInit.AddReg, HdAudShortCut.AddReg, VMAPO232.AddReg, HdAudBranding.AddReg, SysFx.CoInstallers.AddReg, SysFx.NTamd64.CoInstallers.Generic.AddReg
+AddReg    = HdAudModel.AddReg, HdAudProp.AddReg, HdAudInit.AddReg, HdAudShortCut.AddReg, VMAPO232.AddReg, HdAudBranding.AddReg, SysFx.CoInstallers.AddReg, SysFx.NTamd64.CoInstallers.Generic.AddReg, DolbyDTS.renderAPO.AddReg, DolbyDTS.renderPropPage.AddReg
 
 [HdAudModel.HW]
 AddReg = HdAudSecurity.AddReg, FilterHW.AddReg
@@ -1254,10 +1263,14 @@ DDPP64A.dll
 DolbyDAX2APOProp.dll
 DolbyDAX2APOv211.dll
 HiFiDAX2API.dll
-SRS_APO_Suite64.dll
+RenderAPO.dll
+RenderPropPage.dll
+kgtmaven.dtscs
+srs_apo_suite_toshiba64.dll
 Com_SRS_WOWHD64.dll
 Com_SRS_TruSurroundXT64.dll
-SRS_APO_Prop_Page64.dll
+Com_SRS_CSIIDecoder64.dll
+SRS_APO_Prop_Page_Toshiba64.dll
 MBAPO264.dll
 MBWrp64.dll
 
@@ -1337,10 +1350,11 @@ DTSHpxInit64.dll
 11,,ViaKaraokePropPageExt.dll,1
 11,,VtSrdAPO.dll,1
 11,,PropPageExt.dll,1
-11,,SRS_APO_Suite64.dll,1
-11,,COM_SRS_WOWHD64.dll,1
-11,,COM_SRS_TruSurroundXT64.dll,1
-11,,SRS_APO_Prop_Page64.dll,1
+11,,srs_apo_suite_toshiba64.dll,1
+11,,com_srs_wowhd64.dll,1
+11,,com_srs_trusurroundxt64.dll,1
+11,,Com_SRS_CSIIDecoder64.dll,1
+11,,SRS_APO_Prop_Page_Toshiba64.dll,1
 11,,DDPA64.dll,1
 11,,DDPD64A.dll,1
 11,,DDPO64A.dll,1
@@ -1609,6 +1623,31 @@ HKCR,Wow6432Node\CLSID\%CLSID_MBTHX32_EFX%,,0,"CTAPOContainerEFX Class"
 HKCR,Wow6432Node\CLSID\%CLSID_MBTHX32_EFX%\InProcServer32,,0,%10%\SysWOW64\MBAPO232.dll
 HKCR,Wow6432Node\CLSID\%CLSID_MBTHX32_EFX%\InProcServer32,ThreadingModel,0,Both
 
+[DolbyDTS.renderAPO.AddReg]
+; adding APO COM registrations
+HKCR,CLSID\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}",,,"Logitech Surround Sound Effect"
+HKCR,CLSID\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}"\InProcServer32,,,%11%\RenderAPO.dll
+HKCR,CLSID\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}"\InProcServer32,ThreadingModel,,"Both"
+ 
+; adding render APO registrations
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "FriendlyName", ,"Logitech Surround Sound Effect"
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "Copyright", ,"Copyright 2014 Logitech"
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "MajorVersion", 0x00010001, 1
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "MinorVersion", 0x00010001, 1
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "Flags", 0x00010001, 0x0000000d
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "MinInputConnections", 0x00010001, 1
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "MaxInputConnections", 0x00010001, 1
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "MinOutputConnections", 0x00010001, 1
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "MaxOutputConnections", 0x00010001, 1
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "MaxInstances", 0x00010001, 0xffffffff
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "NumAPOInterfaces", 0x00010001, 1
+HKCR,AudioEngine\AudioProcessingObjects\"{7DB50256-CE07-41D2-9F32-6A07AD88E3BE}", "APOInterface0", ,"{FD7F2B29-24D0-4B5C-B177-592C39F9CA10}"
+
+[DolbyDTS.renderPropPage.AddReg]
+; adding render PropPage registrations
+HKCR,CLSID\"{DE4470F5-3DB9-4668-93BE-E5C9A352FC65}",,,"Effects"
+HKCR,CLSID\"{DE4470F5-3DB9-4668-93BE-E5C9A352FC65}"\InProcServer32,,,%11%\RenderPropPage.dll
+HKCR,CLSID\"{DE4470F5-3DB9-4668-93BE-E5C9A352FC65}"\InProcServer32,ThreadingModel,,"Apartment"
 
 ;;
 ;; All FX\\0 entries in the same grouping
@@ -1653,6 +1692,18 @@ HKR,"FX\\0",%PKEY_Endpoint_FilePath_SuperHumanHearing%,,"%11%\SRSLabs\SHHParamet
 HKR,"FX\\0",%PKEY_Endpoint_HeadphoneX_SurroundOn%,%REG_DWORD%,0x1 
 HKR,"FX\\0",%PKEY_Endpoint_HeadphoneX_Vendor%,%REG_DWORD%,0x10f5
 
+HKR,"FX\\0","{D3993A3F-99C2-4402-B5EC-A92A0367664B},5",0x00010000,"{C18E2F7E-933D-4965-B7D1-1EEF228D2AF3}"
+HKR,"FX\\0","{25BFB9BF-6CC4-42B5-A4CA-FCA0A6812E0E},0",0x00000001,41,00,00,00,01,00,00,00,00,00,\
+  20,42,00,00,90,42,00,00,54,43,00,00,de,43,00,e0,93,44,00,20,26,45,00,98,9f,\
+  45,00,88,06,46,00,40,32,46,00,6c,43,46,00,00,00,00,00,00,00,00,00,00,00,00,\
+  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+  00,00,00,33,33,33,3f,33,33,33,3f,33,33,33,3f,33,33,33,3f,33,33,33,3f,33,33,\
+  33,3f,33,33,33,3f,33,33,33,3f,33,33,33,3f,33,33,33,3f,01,00,00,00,00,00,00,\
+  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+  00,00,00,00,02,00,00,00
+HKR,"FX\\0","{91F1336D-C37C-4C48-ADEB-92172FA87EEB},100",0x00010001,1
+HKR,"FX\\0","{91F1336D-C37C-4C48-ADEB-92172FA87EEB},1000",,"kgtmaven.dtscs"
+
 ; Driver developer would replace the list of supported processing modes here
 HKR,FX\0,%PKEY_SFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
 HKR,FX\0,%PKEY_MFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
@@ -1691,6 +1742,18 @@ HKR,"FX\\0",%PKEY_Endpoint_Enable_SuperHumanHearing_HotKey%,%REG_DWORD%,0x0
 HKR,"FX\\0",%PKEY_Endpoint_FilePath_SuperHumanHearing%,,"%11%\SRSLabs\SHHParameter\%SHH_FILENAME%"
 HKR,"FX\\0",%PKEY_Endpoint_HeadphoneX_SurroundOn%,%REG_DWORD%,0x1 
 HKR,"FX\\0",%PKEY_Endpoint_HeadphoneX_Vendor%,%REG_DWORD%,0x10f5
+
+HKR,"FX\\0","{D3993A3F-99C2-4402-B5EC-A92A0367664B},5",0x00010000,"{C18E2F7E-933D-4965-B7D1-1EEF228D2AF3}"
+HKR,"FX\\0","{25BFB9BF-6CC4-42B5-A4CA-FCA0A6812E0E},0",0x00000001,41,00,00,00,01,00,00,00,00,00,\
+  20,42,00,00,90,42,00,00,54,43,00,00,de,43,00,e0,93,44,00,20,26,45,00,98,9f,\
+  45,00,88,06,46,00,40,32,46,00,6c,43,46,00,00,00,00,00,00,00,00,00,00,00,00,\
+  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+  00,00,00,33,33,33,3f,33,33,33,3f,33,33,33,3f,33,33,33,3f,33,33,33,3f,33,33,\
+  33,3f,33,33,33,3f,33,33,33,3f,33,33,33,3f,33,33,33,3f,01,00,00,00,00,00,00,\
+  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,\
+  00,00,00,00,02,00,00,00
+HKR,"FX\\0","{91F1336D-C37C-4C48-ADEB-92172FA87EEB},100",0x00010001,1
+HKR,"FX\\0","{91F1336D-C37C-4C48-ADEB-92172FA87EEB},1000",,"kgtmaven.dtscs"
 
 ; Driver developer would replace the list of supported processing modes here
 HKR,FX\0,%PKEY_SFX_ProcessingModes_Supported_For_Streaming%,0x00010000,%AUDIO_SIGNALPROCESSINGMODE_DEFAULT%
